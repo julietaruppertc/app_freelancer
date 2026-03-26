@@ -1,18 +1,23 @@
 import { XOConnectProvider } from 'xo-connect';
 import { ethers } from 'ethers';
 
-let xoProvider: XOConnectProvider;
-let provider: ethers.providers.Web3Provider;
-let signer: ethers.Signer;
+let xoProvider: any;
+let provider: ethers.BrowserProvider; 
+let signer: ethers.JsonRpcSigner;
 
 export async function connectWallet() {
+    if (typeof window === "undefined") return;
+    
     xoProvider = new XOConnectProvider();
-    provider = new ethers.providers.Web3Provider(xoProvider);
-    signer = provider.getSigner();
-
-    const accounts = await xoProvider.request({ method: 'eth_requestAccounts' });
-    console.log('Connected account:', accounts[0]);
-    return accounts[0];
+    // BrowserProvider reemplaza a Web3Provider
+    provider = new ethers.BrowserProvider(xoProvider);
+    
+    await xoProvider.request({ method: 'eth_requestAccounts' });
+    signer = await provider.getSigner();
+    
+    const address = await signer.getAddress();
+    console.log('Connected account:', address);
+    return address;
 }
 
 export function getSigner() {
