@@ -2,6 +2,8 @@
 
 import React, { useMemo, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type TaskCreationPayload = {
   description: string;
@@ -9,16 +11,13 @@ type TaskCreationPayload = {
 };
 
 type TaskCreationProps = {
-  isAuthenticated?: boolean;
-  onRequireAuthentication?: () => void;
   onGenerateMatchmaking?: (payload: TaskCreationPayload) => Promise<void> | void;
 };
 
 export default function TaskCreation({
-  isAuthenticated = false,
-  onRequireAuthentication,
   onGenerateMatchmaking,
 }: TaskCreationProps) {
+  const router = useRouter();
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<"idle" | "loading">("idle");
   const [error, setError] = useState("");
@@ -30,10 +29,6 @@ export default function TaskCreation({
 
   const handleGenerate = async () => {
     if (!canSubmit) return;
-    if (!isAuthenticated) {
-      onRequireAuthentication?.();
-      return;
-    }
 
     setError("");
     setStatus("loading");
@@ -44,8 +39,14 @@ export default function TaskCreation({
     };
 
     try {
-      await onGenerateMatchmaking?.(payload);
+      if (onGenerateMatchmaking) {
+        await onGenerateMatchmaking(payload);
+      }
+      
       setStatus("idle");
+      // Redirigimos a la página de resultados pasando el requerimiento por URL
+      router.push(`/MatchmakingResults?query=${encodeURIComponent(description)}`);
+      
     } catch {
       setError("No se pudo generar el matchmaking. Intenta nuevamente.");
       setStatus("idle");
@@ -53,56 +54,81 @@ export default function TaskCreation({
   };
 
   return (
-    <PageShell>
-      <CenterColumn>
-        <Card>
-          <HeaderRow>
-            <Eyebrow>Concierge IA</Eyebrow>
-            <StatusChip>Online</StatusChip>
-          </HeaderRow>
+    <Container>
+      {/* --- HEADER (Idéntico al del Home) --- */}
+      <Header>
+        <HeaderLeft>
+          <Logo>Vendimia Tech</Logo>
+          <DesktopNav>
+            <NavLink href="#" $active>
+              Discover
+            </NavLink>
+            <NavLink href="#">Feed</NavLink>
+            <NavLink href="#">Messages</NavLink>
+          </DesktopNav>
+        </HeaderLeft>
+        <HeaderRight>
+          <IconGroup>
+            <span>🔔</span>
+            <span>👤</span>
+          </IconGroup>
+          <Link href="/login" passHref legacyBehavior>
+            <LoginButton>Iniciar Sesión</LoginButton>
+          </Link>
+        </HeaderRight>
+      </Header>
 
-          <Title>Describe tu necesidad</Title>
-          <Subtitle>
-            Define los parametros del desafio tecnico para activar el flujo de matchmaking.
-          </Subtitle>
+      {/* --- MAIN CONTENT --- */}
+      <Main>
+        <PageShell>
+          <CenterColumn>
+            <Card>
+              <HeaderRow>
+                <Eyebrow>Concierge IA</Eyebrow>
+                <StatusChip>Online</StatusChip>
+              </HeaderRow>
 
-          <DescriptionArea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Ejemplo: Necesito un desarrollador para auditar contratos en Solidity para un protocolo DeFi, incluir pruebas de seguridad y recomendaciones de hardening..."
-            disabled={status === "loading"}
-            maxLength={2500}
-          />
+              <Title>Describe tu necesidad</Title>
+              <Subtitle>
+                Define los parametros del desafio tecnico para activar el flujo de matchmaking.
+              </Subtitle>
 
-          <MetaRow>
-            <Hint>Minimo 20 caracteres para un analisis confiable.</Hint>
-            <Counter>{description.length}/2500</Counter>
-          </MetaRow>
+              <DescriptionArea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Ejemplo: Necesito un desarrollador para auditar contratos en Solidity para un protocolo DeFi, incluir pruebas de seguridad y recomendaciones de hardening..."
+                disabled={status === "loading"}
+                maxLength={2500}
+              />
 
-          {status === "loading" ? (
-            <LoadingBlock>
-              <LoaderDot />
-              <LoadingText>Gemini AI analizando requerimientos...</LoadingText>
-            </LoadingBlock>
-          ) : null}
+              <MetaRow>
+                <Hint>Minimo 20 caracteres para un analisis confiable.</Hint>
+                <Counter>{description.length}/2500</Counter>
+              </MetaRow>
 
-          {!isAuthenticated ? (
-            <HintWarning>
-              Necesitas iniciar sesion o conectar wallet para generar matchmaking.
-            </HintWarning>
-          ) : null}
+              {status === "loading" ? (
+                <LoadingBlock>
+                  <LoaderDot />
+                  <LoadingText>Gemini AI analizando requerimientos...</LoadingText>
+                </LoadingBlock>
+              ) : null}
 
-          {error ? <ErrorText>{error}</ErrorText> : null}
+              {error ? <ErrorText>{error}</ErrorText> : null}
 
-          <ActionButton type="button" disabled={!canSubmit} onClick={handleGenerate}>
-            Generar Matchmaking con IA
-          </ActionButton>
-        </Card>
-      </CenterColumn>
-    </PageShell>
+              <ActionButton type="button" disabled={!canSubmit} onClick={handleGenerate}>
+                Generar Matchmaking con IA
+              </ActionButton>
+            </Card>
+          </CenterColumn>
+        </PageShell>
+      </Main>
+    </Container>
   );
 }
 
+// =============================
+// ANIMACIONES
+// =============================
 const pulse = keyframes`
   0% { transform: scale(0.86); opacity: 0.5; }
   50% { transform: scale(1.08); opacity: 1; }
@@ -114,18 +140,111 @@ const shimmer = keyframes`
   to { background-position: 100% 50%; }
 `;
 
-const PageShell = styled.main`
+// =============================
+// STYLED COMPONENTS (Fusión de Home y TaskCreation)
+// =============================
+
+// Estructura Base (Del Home)
+const Container = styled.div`
   min-height: 100vh;
+  background-color: #131318;
+  color: #e4e1e8;
+  font-family: 'Manrope', sans-serif;
+`;
+
+const Header = styled.header`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  background: rgba(28, 28, 31, 0.7);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  z-index: 50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 48px;
+`;
+
+const Logo = styled.span`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: -0.5px;
+`;
+
+const DesktopNav = styled.nav`
+  display: none;
+  gap: 32px;
+  @media (min-width: 768px) {
+    display: flex;
+  }
+`;
+
+const NavLink = styled.a<{ $active?: boolean }>`
+  text-decoration: none;
+  font-weight: ${(props) => (props.$active ? "bold" : "normal")};
+  color: ${(props) => (props.$active ? "#8C3BFF" : "#9ca3af")};
+  border-bottom: ${(props) => (props.$active ? "2px solid #8C3BFF" : "none")};
+  padding-bottom: 4px;
+  transition: color 0.2s;
+  &:hover {
+    color: white;
+  }
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+`;
+
+const IconGroup = styled.div`
+  display: flex;
+  gap: 16px;
+  font-size: 1.2rem;
+  cursor: pointer;
+`;
+
+const LoginButton = styled.a`
+  background: #7000e3;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s;
+  &:hover {
+    filter: brightness(1.1);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+const Main = styled.main`
+  padding-top: 80px; /* Compensa la altura del Header fijo */
+`;
+
+// Estructura de la Tarjeta (TaskCreation)
+const PageShell = styled.section`
+  min-height: calc(100vh - 80px); /* Ocupa el resto de la pantalla */
   display: grid;
   place-items: center;
   padding: 32px 16px;
   background:
-    radial-gradient(circle at 12% 10%, rgba(140, 59, 255, 0.24), transparent 36%),
-    radial-gradient(circle at 88% 88%, rgba(83, 228, 137, 0.1), transparent 34%),
-    #1c1c1f;
+    radial-gradient(circle at 12% 10%, rgba(140, 59, 255, 0.15), transparent 36%),
+    radial-gradient(circle at 88% 88%, rgba(83, 228, 137, 0.08), transparent 34%);
 `;
 
-const CenterColumn = styled.section`
+const CenterColumn = styled.div`
   width: min(900px, 100%);
 `;
 
@@ -279,10 +398,4 @@ const ActionButton = styled.button`
     opacity: 0.45;
     transform: none;
   }
-`;
-
-const HintWarning = styled.p`
-  margin: 12px 0 0;
-  color: rgba(245, 244, 249, 0.55);
-  font-size: 0.8rem;
 `;

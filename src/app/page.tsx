@@ -28,17 +28,6 @@ export default function Home() {
     router.push("/matchmaking"); // Navegamos a resultados
   };
 
-  // Si está autenticado o tiene wallet, mostramos TaskCreation
-  if (isAuthenticated || address) {
-    return (
-      <TaskCreation
-        isAuthenticated={true}
-        onRequireAuthentication={() => {}}
-        onGenerateMatchmaking={handleGenerateMatch}
-      />
-    );
-  }
-
   // Si no está autenticado, mostramos landing + onboarding
   return (
     <Container>
