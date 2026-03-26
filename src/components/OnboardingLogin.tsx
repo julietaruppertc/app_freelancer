@@ -1,6 +1,7 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 
 type LoginPayload = {
@@ -95,6 +96,11 @@ export default function OnboardingLogin({
             <WalletIcon aria-hidden="true">◉</WalletIcon>
             <span>Conectar Billetera Web3</span>
           </WalletButton>
+
+          <TaskPreviewLink href="/create-task">
+            <span>Ver flujo TaskCreation</span>
+            <ArrowIcon aria-hidden="true">→</ArrowIcon>
+          </TaskPreviewLink>
 
           <HelperText>
             Nuevo en Web3? Aprende por que usamos wallets.
@@ -332,6 +338,29 @@ const WalletButton = styled.button`
   justify-content: center;
   gap: 8px;
   cursor: pointer;
+`;
+
+const TaskPreviewLink = styled(Link)`
+  margin-top: 10px;
+  width: 100%;
+  height: 42px;
+  border-radius: 7px;
+  border: 1px solid rgba(140, 59, 255, 0.62);
+  color: #d9c2ff;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(140, 59, 255, 0.09);
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: rgba(140, 59, 255, 0.16);
+    border-color: rgba(140, 59, 255, 0.85);
+  }
 `;
 
 const WalletIcon = styled.span`
