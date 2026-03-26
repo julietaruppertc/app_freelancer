@@ -29,7 +29,7 @@ export default function HomePage() {
             <span>👤</span>
           </IconGroup>
           {/* Ruteo al Login */}
-          <Link href="/login" passHref legacyBehavior>
+          <Link href="/login" passHref>
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>
         </HeaderRight>

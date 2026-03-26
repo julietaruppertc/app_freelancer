@@ -97,16 +97,6 @@ export default function OnboardingLogin({
             <span>Conectar Billetera Web3</span>
           </WalletButton>
 
-          <TaskPreviewLink href="/create-task">
-            <span>Ver flujo TaskCreation</span>
-            <ArrowIcon aria-hidden="true">→</ArrowIcon>
-          </TaskPreviewLink>
-
-          <TaskPreviewLink href="/milestones">
-            <span>Ver flujo Milestones</span>
-            <ArrowIcon aria-hidden="true">→</ArrowIcon>
-          </TaskPreviewLink>
-
           <HelperText>
             Nuevo en Web3? Aprende por que usamos wallets.
           </HelperText>
