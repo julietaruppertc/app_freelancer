@@ -19,7 +19,7 @@ export async function createEscrow(freelancer: string, arbiter: string, deadline
         arbiter,
         deadline,
         agreementHash,
-        { value: ethers.utils.parseEther(amountEther) }
+        { value: ethers.parseEther(amountEther) }
     );
     return tx.wait(); // espera a que se mine
 }
