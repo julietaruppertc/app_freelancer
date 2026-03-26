@@ -3,55 +3,37 @@
 import React from "react";
 import styled from "styled-components";
 
-type Candidate = {
+// 1. Definimos qué es un Candidato
+export type Candidate = {
   id: string;
-  avatar: string;
   name: string;
   role: string;
-  matchPercentage: number;
-  confidenceScore: number;
-  bio: string;
-  easAttestations: string;
+  description: string;
+  skills: string[];
+  matchScore: number;
+  avatar?: string;
+  easAttestations?: string;
 };
 
-type MatchmakingResultsProps = {
+// 2. Definimos qué datos recibe la pantalla
+export type MatchmakingResultsProps = {
   isAuthenticated?: boolean;
+  query: string;
+  results: Candidate[];
+  status: "success" | "loading" | "error" | "empty";
 };
 
-const CANDIDATES: Candidate[] = [
-  {
-    id: "santi-dev",
-    avatar: "SD",
-    name: "Santiago 'Santi' Dev",
-    role: "Experto en Solidity",
-    matchPercentage: 98,
-    confidenceScore: 98,
-    bio: "Especialista en auditorias DeFi, seguridad de contratos y optimizacion de gas en entornos EVM.",
-    easAttestations: "11 Atestaciones verificadas",
-  },
-  {
-    id: "m-designer",
-    avatar: "MD",
-    name: "Maria 'M' Designer",
-    role: "Diseno UX/UI Crypto",
-    matchPercentage: 94,
-    confidenceScore: 95,
-    bio: "Lider de producto visual para dApps, con experiencia en conversion, onboarding y interfaces wallet-first.",
-    easAttestations: "8 Atestaciones verificadas",
-  },
-  {
-    id: "a-architect",
-    avatar: "AA",
-    name: "Alex 'A' Architect",
-    role: "Arquitecto Full-Stack Web3",
-    matchPercentage: 91,
-    confidenceScore: 92,
-    bio: "Disena sistemas robustos entre frontend, smart contracts y backend de alta disponibilidad para escalar productos.",
-    easAttestations: "10 Atestaciones verificadas",
-  },
-];
+export default function MatchmakingResults({ 
+  isAuthenticated = false,
+  query,
+  results,
+  status
+}: MatchmakingResultsProps) {
+  
+  const getInitials = (name: string) => {
+    return name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+  };
 
-export default function MatchmakingResults({ isAuthenticated = false }: MatchmakingResultsProps) {
   return (
     <Shell>
       <Sidebar>
@@ -77,55 +59,86 @@ export default function MatchmakingResults({ isAuthenticated = false }: Matchmak
       </Sidebar>
 
       <Content>
-        <Headline>IA Matchmaking: Los 3 mejores candidatos para ti</Headline>
+        <Headline>IA Matchmaking: Resultados</Headline>
         <Subhead>
+          Requerimiento analizado: <strong>"{query}"</strong> <br/>
           Candidatos priorizados por evidencia on-chain, score de confianza y performance en proyectos similares.
         </Subhead>
 
-        <CardsGrid>
-          {CANDIDATES.map((candidate) => (
-            <FreelancerCard key={candidate.id}>
-              <IdentityRow>
-                <Avatar>{candidate.avatar}</Avatar>
-                <IdentityText>
-                  <Name>{candidate.name}</Name>
-                  <Role>{candidate.role}</Role>
-                </IdentityText>
-                <EasBadge>Atribuciones Web3 (EAS)</EasBadge>
-              </IdentityRow>
+        {status === "loading" && (
+          <StateMessage>Analizando perfiles con IA...</StateMessage>
+        )}
 
-              <MetricsRow>
-                <MatchBadge>{candidate.matchPercentage}% Match</MatchBadge>
-                <ScoreBlock>
-                  <ScoreLabel>
-                    Score de Confianza <span>{candidate.confidenceScore}/100</span>
-                  </ScoreLabel>
-                  <ScoreTrack>
-                    <ScoreFill $value={candidate.confidenceScore} />
-                  </ScoreTrack>
-                </ScoreBlock>
-              </MetricsRow>
+        {status === "error" && (
+          <StateMessage $error>Hubo un problema al procesar el matchmaking. Intenta nuevamente.</StateMessage>
+        )}
 
-              <Bio>{candidate.bio}</Bio>
-              <AttestationText>{candidate.easAttestations}</AttestationText>
+        {status === "empty" && (
+          <StateMessage>Por favor, ingresa un requerimiento para buscar talento.</StateMessage>
+        )}
 
-              <ViewButton type="button">Ver Perfil Completo</ViewButton>
-            </FreelancerCard>
-          ))}
-        </CardsGrid>
+        {status === "success" && (
+          <CardsGrid>
+            {results.length === 0 ? (
+              <StateMessage>No se encontraron freelancers que coincidan con tu búsqueda.</StateMessage>
+            ) : (
+              results.map((candidate) => (
+                <FreelancerCard key={candidate.id}>
+                  <IdentityRow>
+                    <Avatar>{candidate.avatar || getInitials(candidate.name)}</Avatar>
+                    <IdentityText>
+                      <Name>{candidate.name}</Name>
+                      <Role>{candidate.role}</Role>
+                    </IdentityText>
+                    <EasBadge>Atribuciones Web3 (EAS)</EasBadge>
+                  </IdentityRow>
 
-        <FooterCta>
-          <FooterTitle>Listo para escalar tu proyecto?</FooterTitle>
-          <TelegramButton type="button">
-            <TelegramIcon aria-hidden="true">✈</TelegramIcon>
-            Solicitar Entrevista (Telegram)
-          </TelegramButton>
-        </FooterCta>
+                  <MetricsRow>
+                    <MatchBadge>{candidate.matchScore}% Match</MatchBadge>
+                    <ScoreBlock>
+                      <ScoreLabel>
+                        Score de Confianza <span>{candidate.matchScore}/100</span>
+                      </ScoreLabel>
+                      <ScoreTrack>
+                        <ScoreFill $value={candidate.matchScore} />
+                      </ScoreTrack>
+                    </ScoreBlock>
+                  </MetricsRow>
+
+                  <Bio>{candidate.description}</Bio>
+                  
+                  <SkillsRow>
+                     {candidate.skills.map(skill => (
+                       <SkillTag key={skill}>{skill}</SkillTag>
+                     ))}
+                  </SkillsRow>
+
+                  <AttestationText>{candidate.easAttestations || "Verificando atestaciones..."}</AttestationText>
+
+                  <ViewButton type="button">Ver Perfil Completo</ViewButton>
+                </FreelancerCard>
+              ))
+            )}
+          </CardsGrid>
+        )}
+
+        {status === "success" && results.length > 0 && (
+          <FooterCta>
+            <FooterTitle>Listo para escalar tu proyecto?</FooterTitle>
+            <TelegramButton type="button">
+              <TelegramIcon aria-hidden="true">✈</TelegramIcon>
+              Solicitar Entrevista (Telegram)
+            </TelegramButton>
+          </FooterCta>
+        )}
       </Content>
     </Shell>
   );
 }
 
+// ==========================================
+// STYLED COMPONENTS 
+// ==========================================
 const Shell = styled.main`
   min-height: 100vh;
   background: #1c1c1f;
@@ -228,6 +241,16 @@ const Subhead = styled.p`
   color: rgba(243, 242, 247, 0.62);
   max-width: 780px;
   line-height: 1.5;
+`;
+
+const StateMessage = styled.div<{ $error?: boolean }>`
+  padding: 20px;
+  border-radius: 12px;
+  background: ${(props) => (props.$error ? 'rgba(255, 89, 89, 0.1)' : 'rgba(140, 59, 255, 0.1)')};
+  color: ${(props) => (props.$error ? '#ff5959' : '#e3d2ff')};
+  border: 1px solid ${(props) => (props.$error ? 'rgba(255, 89, 89, 0.2)' : 'rgba(140, 59, 255, 0.2)')};
+  text-align: center;
+  margin-bottom: 24px;
 `;
 
 const CardsGrid = styled.div`
@@ -337,12 +360,30 @@ const ScoreFill = styled.div<{ $value: number }>`
   width: ${(props) => `${props.$value}%`};
   border-radius: 999px;
   background: #53e489;
+  transition: width 1s ease-in-out;
 `;
 
 const Bio = styled.p`
   margin: 14px 0 8px;
   color: rgba(243, 242, 247, 0.72);
   line-height: 1.5;
+`;
+
+const SkillsRow = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+`;
+
+const SkillTag = styled.span`
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #a2a2ab;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
 `;
 
 const AttestationText = styled.p`
@@ -361,6 +402,11 @@ const ViewButton = styled.button`
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
 `;
 
 const FooterCta = styled.footer`
@@ -395,6 +441,11 @@ const TelegramButton = styled.button`
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(1.2);
+  }
 `;
 
 const TelegramIcon = styled.span`

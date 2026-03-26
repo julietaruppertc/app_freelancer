@@ -45,7 +45,7 @@ export default function TaskCreation({
       
       setStatus("idle");
       // Redirigimos a la página de resultados pasando el requerimiento por URL
-      router.push(`/MatchmakingResults?query=${encodeURIComponent(description)}`);
+      router.push(`/matchmaking?query=${encodeURIComponent(description)}`);
       
     } catch {
       setError("No se pudo generar el matchmaking. Intenta nuevamente.");
