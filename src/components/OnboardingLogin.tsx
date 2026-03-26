@@ -102,6 +102,11 @@ export default function OnboardingLogin({
             <ArrowIcon aria-hidden="true">→</ArrowIcon>
           </TaskPreviewLink>
 
+          <TaskPreviewLink href="/milestones">
+            <span>Ver flujo Milestones</span>
+            <ArrowIcon aria-hidden="true">→</ArrowIcon>
+          </TaskPreviewLink>
+
           <HelperText>
             Nuevo en Web3? Aprende por que usamos wallets.
           </HelperText>
