@@ -1,0 +1,471 @@
+{
+    "contractName": "DeployBasicEscrow",
+    "abi": [
+        {
+            "inputs": [],
+            "name": "IS_SCRIPT",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "run",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "metadata": "{\"compiler\":{\"version\":\"0.8.34+commit.80d5c536\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"IS_SCRIPT\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"run\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/script/DeployBasicEscrow.s.sol\":\"DeployBasicEscrow\"},\"evmVersion\":\"osaka\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[],\"viaIR\":true},\"sources\":{\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/Base.sol\":{\"keccak256\":\"0x4a1022ac2e69c9ac19e278992d7db8994f981290610eaa411e74eb5af1f0c3fe\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://46e5f8806ee02b8ff7c3a3c3a83ad66b56cd6b6294dac9291dd8d13ffa66bd19\",\"dweb:/ipfs/QmaiwNCQAyD2hkgiwp7Z564xB82aaVxpKCXVxWekQQeeQ5\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/Script.sol\":{\"keccak256\":\"0x3d3ecc4b14a6dfe4d0d5e27777308d0c2006e838e44032381ec258c040aae45a\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://0df14d3d879a9dfd6609f1469c51a50fae35fd1c14abe96207b9faab19843171\",\"dweb:/ipfs/QmcUFDqSeUQgyV42w4pQXQ5BrCDPTqKNunq4yrc4NyxjVp\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdChains.sol\":{\"keccak256\":\"0x04bf7c91698ce6862ad66a6df7c0499f413b62e1347197b4ff187a0049e756c3\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://190790f5ea35c52da790845c587dc980a6195e91cf6029924aa32b8f36f54624\",\"dweb:/ipfs/QmW1HAThH1LCYBNhm8c14T4kQPXKEBSivjSTNdctqAsDMr\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdCheats.sol\":{\"keccak256\":\"0xf0a24d299bf58ced4142f6151caa62f7b6024b46d0078d5657995b890128ca20\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://058242578881744761b8bb353fbc74ea91af8b38cf6255919129505a37edfbcb\",\"dweb:/ipfs/QmagA9EMttYoZxDqaHLTihsMtn4B5W9LEXjG75CPH5BZjZ\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdConstants.sol\":{\"keccak256\":\"0x264e6254232aa2d70b9b03f956195f08fcc596267c2e171a6054fa426ef079e7\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://5a39dd90903c67ef850d030773d0bc2e5246e7da506303701a1e4d2a03694521\",\"dweb:/ipfs/QmaWScjRNNHZzTcoubXPsG427Rs9fUQcAVjQrjWZAYop9c\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdJson.sol\":{\"keccak256\":\"0x5019a40e81c11b33922a621e4743acaac7185a697dc21106aa4811884b1216aa\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://c93ae2fd143751827d9dadcce6f9d1c66cee3cd8bf04636796990901e5f8aec9\",\"dweb:/ipfs/QmRPGA1TJYRqSV7JTJ4zbtmZRCsfUvuoYzjBsxFS9SVLER\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdMath.sol\":{\"keccak256\":\"0x700a4cb9b38bd8cd81dd7874e3a684d6b0da09dfe30ead409a624e0156075504\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://fe19d92e16c5258b2019d987b249fb5ed79560fcaa8a30a240b95c478bc6ff8c\",\"dweb:/ipfs/QmcnHjq7og14yUKbgvCPaTwXLwpf7N7boJjjgNP4WDTwkc\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdStorage.sol\":{\"keccak256\":\"0x55d36bb866a1c8a414c0de5cc24295011436db8d94d3b8267c548c9012067185\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://972996172d3721dfff2a950b8efcc866ecd2bb96edf2038f3ae6bc33c286fe84\",\"dweb:/ipfs/QmT5LQptEA7UpcjxfdJqY2XCxU8a51Um5wosgBfTcwRMfR\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdStyle.sol\":{\"keccak256\":\"0x98ff2ccd0576e7154d339e12b7b0d154705851d34c849b5c76e9fda5fd0d0702\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://e0c8ecdd99eaf7759a874a06d5d181b8123447902a2f341159edd6eb11ff767f\",\"dweb:/ipfs/QmTGBzibKF64KvAy5XP8gY1McXDNhLDmap1ynV9EcdhrGm\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/StdUtils.sol\":{\"keccak256\":\"0x39f33a1a5030a0d6af96c59e2ed8742d8a68ea462be79c0189a432f7b57e8db8\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://1be221aab2760b5e17de39f49e4cca6cbe67babf7cd6340b29c30371daf5a269\",\"dweb:/ipfs/QmYY9AGsV6PzPUePMC5uk3Lyw7tYTiMhrRwfNGWvwdkpKW\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/Vm.sol\":{\"keccak256\":\"0xd1fc394727dafe98b9f546156246c3e5e786520e7697295b391391065e783542\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://a6bc17c08d3003a2c28b76ac289affc0bee98031d1afeeca9b679189e1d7d7bc\",\"dweb:/ipfs/QmdhV57fDNcWYKcigrypy98WEw7Gmp199tGmRoREyMHnP4\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/console.sol\":{\"keccak256\":\"0x766606b01f1915f894402e68426d1b59b36edb77cfcae1897e8d262e7c013d7e\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://53d19e35a26e4e0da255d5232ff67404648b2f1a3e6ea012c3a2f2d275ebdc21\",\"dweb:/ipfs/QmWzh8VAs1a9JUhfLbN9v7gjZ4RRqnGWvexSJJhsiq3Ck5\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/console2.sol\":{\"keccak256\":\"0x52053a03839428c7acabd2bdd1c71f2efa5242671c1ef049940001ffe3eb21a5\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://97f612477342332c986ae9a655fa12da19345f1796110c5f4da136868d825465\",\"dweb:/ipfs/QmaJ9yv8UBp193hCMNh4xCUvAnQ63YPRqnYUrdmfcfQakM\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/interfaces/IMulticall3.sol\":{\"keccak256\":\"0x65953eaae40240075e1607fba3835f1daa71d2f51590f76230f757ac5c6d5a63\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://c5021b013b5de6f67c07f7461aeb3a1f17bad65c5989af7dcea2bce1ef5dbc5d\",\"dweb:/ipfs/QmXziBeMWJyvtiYgUk6SirFnsneuFZT81UBfYrtcMmTtwL\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/safeconsole.sol\":{\"keccak256\":\"0xd0cf85009f832966ad020d20a6f77f65784b51b657e369bf229780551764447c\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://625177a0070f7fa9acf370d34444600878c3fb342f5a827e761288235bc6c800\",\"dweb:/ipfs/QmRSwCxzXS1XgT3DWme5UPfLFZ8fdgS7EpD2BZ7UbBdmXm\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/script/DeployBasicEscrow.s.sol\":{\"keccak256\":\"0x6f73f755780784562d4d48a5b29d41bd7cf9ff27f3d18fe9a9f92742fc172136\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://db396080aaaba395e37387655366bbbcdfab4020cd760a346b869e13b3802f85\",\"dweb:/ipfs/QmfSx4p2gwKhBEEu3gJ6yFYkEQkjWHvF7FxdJCEWxMSFsT\"]},\"c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/src/BasicEscrow.sol\":{\"keccak256\":\"0x064ce595b7d82e1b220e734d8f72436825c0ed8d805d3ea21653ece3278bd36e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://390b4f397e9ecfb903d1f5da1a27850d52de6c0bcbdd04c852e5308287c8940e\",\"dweb:/ipfs/QmUzYgJ6ftA3GAqy7NjWsm8usbm9K3frBKLgLz3YYBzE42\"]}},\"version\":1}",
+    "bytecode": "608080604052346026576201000162ff00ff19600c541617600c55610948908161002b8239f35b5f80fdfe6080806040526004361015610012575f80fd5b5f905f3560e01c908163c04062261461005c575063f8ccbf4714610034575f80fd5b34610059578060031936011261005957602060ff600c5460101c166040519015158152f35b80fd5b9050346101cc575f3660031901126101cc57737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156101cc57637fb5297f60e01b81525f8160048183737109709ecfa91a80626ff3989d68f67f5b1dd12d5af180156101c1576101ae575b5060405161070c8082019082821067ffffffffffffffff83111761019a5760409183916102078339738a27e08968d2de77acce0c871e9502b711235253815273afe3bd744efe382732a8a9c236b41165e2405d2c602082015203019082f01561018e57737109709ecfa91a80626ff3989d68f67f5b1dd12d3b1561005957604051633b756e9b60e11b81528190818160048183737109709ecfa91a80626ff3989d68f67f5b1dd12d5af18015610183576101725750f35b8161017c916101d0565b6100595780f35b6040513d84823e3d90fd5b604051903d90823e3d90fd5b634e487b7160e01b84526041600452602484fd5b6101ba91505f906101d0565b5f5f6100bb565b6040513d5f823e3d90fd5b5f80fd5b90601f8019910116810190811067ffffffffffffffff8211176101f257604052565b634e487b7160e01b5f52604160045260245ffdfe608034609a57601f61070c38819003918201601f19168301916001600160401b03831184841017609e578084926040948552833981010312609a57604b602060458360b2565b920160b2565b5f8054336001600160a01b031991821617909155600280546001600160a01b03948516908316179055600180549290931691161790556005805460ff1916905560405161064690816100c68239f35b5f80fd5b634e487b7160e01b5f52604160045260245ffd5b51906001600160a01b0382168203609a5756fe6080806040526004361015610012575f80fd5b5f3560e01c90816308551a53146104f4575080630c3f6acf146104cb578063590e1ae31461035857806369d89575146102485780637150d8ae14610221578063a585412314610204578063d0e30db0146100c8578063f86ccd41146100ab5763fe25e00a1461007f575f80fd5b346100a7575f3660031901126100a7576002546040516001600160a01b039091168152602090f35b5f80fd5b346100a7575f3660031901126100a7576020600354604051908152f35b5f3660031901126100a7575f546001600160a01b031633036101b15760ff60055416600481101561019d576100fd9015610517565b341561014e573460035542600455600160ff19600554161760055560018060a01b035f54167f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c46020604051348152a2005b60405162461bcd60e51b815260206004820152602160248201527f456c206465706f7369746f206465626520736572206d61796f722061206365726044820152606f60f81b6064820152608490fd5b634e487b7160e01b5f52602160045260245ffd5b60405162461bcd60e51b815260206004820152602560248201527f536f6c6f20656c20636f6d707261646f72207075656465206c6c616d61722061604482015264206573746f60d81b6064820152608490fd5b346100a7575f3660031901126100a7576020600454604051908152f35b346100a7575f3660031901126100a7575f546040516001600160a01b039091168152602090f35b346100a7575f3660031901126100a75760ff60055416600481101561019d5760016102739114610517565b5f546001600160a01b031633148015610344575b6102909061056f565b6003545f600355600260ff1960055416176005555f8080808460018060a01b03600154165af16102be6105ab565b50156102ff576001546040519182526001600160a01b0316907fb21fb52d5749b80f3182f8c6992236b5e5576681880914484d7f4c9b062e619e90602090a2005b60405162461bcd60e51b815260206004820152601f60248201527f5472616e73666572656e63696120616c2076656e6465646f722066616c6c6f006044820152606490fd5b506002546001600160a01b03163314610287565b346100a7575f3660031901126100a75760ff60055416600481101561019d5760016103839114610517565b6002546001600160a01b03163303610448575b6003545f600355600360ff1960055416176005555f8080808460018060a01b038254165af16103c36105ab565b5015610403575f546040519182526001600160a01b0316907fd7dee2702d63ad89917b6a4da9981c90c4d24f8c2bdfd64c604ecae57d8d065190602090a2005b60405162461bcd60e51b815260206004820152601c60248201527f5265656d626f6c736f20616c20636f6d707261646f722066616c6c6f000000006044820152606490fd5b61045c60018060a01b035f5416331461056f565b60045462278d0081018091116104b75742116103965760405162461bcd60e51b815260206004820152601c60248201527f5469656d706f20646520657370657261206e6f2063756d706c69646f000000006044820152606490fd5b634e487b7160e01b5f52601160045260245ffd5b346100a7575f3660031901126100a75760ff60055416604051600482101561019d576020918152f35b346100a7575f3660031901126100a7576001546001600160a01b03168152602090f35b1561051e57565b60405162461bcd60e51b815260206004820152602360248201527f45737461646f20696e76616c69646f20706172612065737461206f706572616360448201526234b7b760e91b6064820152608490fd5b1561057657565b60405162461bcd60e51b815260206004820152600d60248201526c4e6f206175746f72697a61646f60981b6044820152606490fd5b3d1561060b573d9067ffffffffffffffff82116105f75760405191601f8101601f19908116603f0116830167ffffffffffffffff8111848210176105f75760405282523d5f602084013e565b634e487b7160e01b5f52604160045260245ffd5b60609056fea26469706673582212204c34b198b5b2a5f3a7fb768586da3de26d819a0d5c4adb7d57307b4b68c7c02264736f6c63430008220033a2646970667358221220d0c403c61d547a1bc0dfc18ac8233332a0f48093135dda01428a42d1432345f664736f6c63430008220033",
+    "deployedBytecode": "6080806040526004361015610012575f80fd5b5f905f3560e01c908163c04062261461005c575063f8ccbf4714610034575f80fd5b34610059578060031936011261005957602060ff600c5460101c166040519015158152f35b80fd5b9050346101cc575f3660031901126101cc57737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156101cc57637fb5297f60e01b81525f8160048183737109709ecfa91a80626ff3989d68f67f5b1dd12d5af180156101c1576101ae575b5060405161070c8082019082821067ffffffffffffffff83111761019a5760409183916102078339738a27e08968d2de77acce0c871e9502b711235253815273afe3bd744efe382732a8a9c236b41165e2405d2c602082015203019082f01561018e57737109709ecfa91a80626ff3989d68f67f5b1dd12d3b1561005957604051633b756e9b60e11b81528190818160048183737109709ecfa91a80626ff3989d68f67f5b1dd12d5af18015610183576101725750f35b8161017c916101d0565b6100595780f35b6040513d84823e3d90fd5b604051903d90823e3d90fd5b634e487b7160e01b84526041600452602484fd5b6101ba91505f906101d0565b5f5f6100bb565b6040513d5f823e3d90fd5b5f80fd5b90601f8019910116810190811067ffffffffffffffff8211176101f257604052565b634e487b7160e01b5f52604160045260245ffdfe608034609a57601f61070c38819003918201601f19168301916001600160401b03831184841017609e578084926040948552833981010312609a57604b602060458360b2565b920160b2565b5f8054336001600160a01b031991821617909155600280546001600160a01b03948516908316179055600180549290931691161790556005805460ff1916905560405161064690816100c68239f35b5f80fd5b634e487b7160e01b5f52604160045260245ffd5b51906001600160a01b0382168203609a5756fe6080806040526004361015610012575f80fd5b5f3560e01c90816308551a53146104f4575080630c3f6acf146104cb578063590e1ae31461035857806369d89575146102485780637150d8ae14610221578063a585412314610204578063d0e30db0146100c8578063f86ccd41146100ab5763fe25e00a1461007f575f80fd5b346100a7575f3660031901126100a7576002546040516001600160a01b039091168152602090f35b5f80fd5b346100a7575f3660031901126100a7576020600354604051908152f35b5f3660031901126100a7575f546001600160a01b031633036101b15760ff60055416600481101561019d576100fd9015610517565b341561014e573460035542600455600160ff19600554161760055560018060a01b035f54167f2da466a7b24304f47e87fa2e1e5a81b9831ce54fec19055ce277ca2f39ba42c46020604051348152a2005b60405162461bcd60e51b815260206004820152602160248201527f456c206465706f7369746f206465626520736572206d61796f722061206365726044820152606f60f81b6064820152608490fd5b634e487b7160e01b5f52602160045260245ffd5b60405162461bcd60e51b815260206004820152602560248201527f536f6c6f20656c20636f6d707261646f72207075656465206c6c616d61722061604482015264206573746f60d81b6064820152608490fd5b346100a7575f3660031901126100a7576020600454604051908152f35b346100a7575f3660031901126100a7575f546040516001600160a01b039091168152602090f35b346100a7575f3660031901126100a75760ff60055416600481101561019d5760016102739114610517565b5f546001600160a01b031633148015610344575b6102909061056f565b6003545f600355600260ff1960055416176005555f8080808460018060a01b03600154165af16102be6105ab565b50156102ff576001546040519182526001600160a01b0316907fb21fb52d5749b80f3182f8c6992236b5e5576681880914484d7f4c9b062e619e90602090a2005b60405162461bcd60e51b815260206004820152601f60248201527f5472616e73666572656e63696120616c2076656e6465646f722066616c6c6f006044820152606490fd5b506002546001600160a01b03163314610287565b346100a7575f3660031901126100a75760ff60055416600481101561019d5760016103839114610517565b6002546001600160a01b03163303610448575b6003545f600355600360ff1960055416176005555f8080808460018060a01b038254165af16103c36105ab565b5015610403575f546040519182526001600160a01b0316907fd7dee2702d63ad89917b6a4da9981c90c4d24f8c2bdfd64c604ecae57d8d065190602090a2005b60405162461bcd60e51b815260206004820152601c60248201527f5265656d626f6c736f20616c20636f6d707261646f722066616c6c6f000000006044820152606490fd5b61045c60018060a01b035f5416331461056f565b60045462278d0081018091116104b75742116103965760405162461bcd60e51b815260206004820152601c60248201527f5469656d706f20646520657370657261206e6f2063756d706c69646f000000006044820152606490fd5b634e487b7160e01b5f52601160045260245ffd5b346100a7575f3660031901126100a75760ff60055416604051600482101561019d576020918152f35b346100a7575f3660031901126100a7576001546001600160a01b03168152602090f35b1561051e57565b60405162461bcd60e51b815260206004820152602360248201527f45737461646f20696e76616c69646f20706172612065737461206f706572616360448201526234b7b760e91b6064820152608490fd5b1561057657565b60405162461bcd60e51b815260206004820152600d60248201526c4e6f206175746f72697a61646f60981b6044820152606490fd5b3d1561060b573d9067ffffffffffffffff82116105f75760405191601f8101601f19908116603f0116830167ffffffffffffffff8111848210176105f75760405282523d5f602084013e565b634e487b7160e01b5f52604160045260245ffd5b60609056fea26469706673582212204c34b198b5b2a5f3a7fb768586da3de26d819a0d5c4adb7d57307b4b68c7c02264736f6c63430008220033a2646970667358221220d0c403c61d547a1bc0dfc18ac8233332a0f48093135dda01428a42d1432345f664736f6c63430008220033",
+    "sourceMap": "193:315:15:-:0;;;;;;;;;;3246:4:2;193:315:15;;;3246:4:2;193:315:15;;;;;;;;;;;",
+    "deployedSourceMap": "193:315:15:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;890:28:1;193:315:15;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;193:315:15;;;;360:42:0;270:19:15;;;;-1:-1:-1;;;270:19:15;;193:315;270:19;193:315;270:19;193:315;360:42:0;270:19:15;;;;;;;;193:315;;;;316:154;;;;;;;;;;;;;;193:315;316:154;;;;;;340:42;2084:14:0;;407:42:15;2084:14:0;;;;316:154:15;;;;;;;;360:42:0;481:18:15;;;;193:315;;-1:-1:-1;;;481:18:15;;193:315;;;;;;;360:42:0;481:18:15;;;;;;;;193:315;;481:18;;;;;:::i;:::-;193:315;;481:18;193:315;481:18;193:315;;2084:14:0;193:315:15;;2084:14:0;;;;316:154:15;193:315;;2084:14:0;;;;;;;;316:154:15;-1:-1:-1;;;2084:14:0;;;193:315:15;2084:14:0;;;;270:19:15;;;;193:315;270:19;;:::i;:::-;193:315;270:19;;;;193:315;;2084:14:0;193:315:15;2084:14:0;;;;;270:19:15;193:315;;;2084:14:0;;;;;;;;;;;;;;;;;;;;;:::o;:::-;;;;-1:-1:-1;2084:14:0;;;;;-1:-1:-1;2084:14:0",
+    "sourcePath": "c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/script/DeployBasicEscrow.s.sol",
+    "compiler": {
+        "name": "solc",
+        "version": "0.8.34+commit.80d5c536"
+    },
+    "ast": {
+        "absolutePath": "c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/script/DeployBasicEscrow.s.sol",
+        "exportedSymbols": {
+            "DeployBasicEscrow": [
+                35756
+            ],
+            "Escrow": [
+                36015
+            ],
+            "Script": [
+                100
+            ],
+            "ScriptBase": [
+                59
+            ],
+            "StdChains": [
+                1125
+            ],
+            "StdCheatsSafe": [
+                3225
+            ],
+            "StdConstants": [
+                4065
+            ],
+            "StdStorage": [
+                5202
+            ],
+            "StdStyle": [
+                8381
+            ],
+            "StdUtils": [
+                9088
+            ],
+            "VmSafe": [
+                13289
+            ],
+            "console": [
+                22484
+            ],
+            "console2": [
+                22484
+            ],
+            "safeconsole": [
+                35725
+            ],
+            "stdJson": [
+                5008
+            ],
+            "stdMath": [
+                5164
+            ],
+            "stdStorageSafe": [
+                6565
+            ]
+        },
+        "id": 35757,
+        "license": "MIT",
+        "nodeType": "SourceUnit",
+        "nodes": [
+            {
+                "id": 35727,
+                "literals": [
+                    "solidity",
+                    "^",
+                    "0.8",
+                    ".25"
+                ],
+                "nodeType": "PragmaDirective",
+                "src": "32:24:15"
+            },
+            {
+                "absolutePath": "c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/Script.sol",
+                "file": "c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/lib/forge-std/src/Script.sol",
+                "id": 35728,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 35757,
+                "sourceUnit": 101,
+                "src": "58:100:15",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "absolutePath": "c:/Users/Usuario/Documents/chiara2026/vendimiatech/blockchain/src/BasicEscrow.sol",
+                "file": "../src/BasicEscrow.sol",
+                "id": 35729,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 35757,
+                "sourceUnit": 36016,
+                "src": "159:32:15",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "abstract": false,
+                "baseContracts": [
+                    {
+                        "baseName": {
+                            "id": 35730,
+                            "name": "Script",
+                            "nameLocations": [
+                                "223:6:15"
+                            ],
+                            "nodeType": "IdentifierPath",
+                            "referencedDeclaration": 100,
+                            "src": "223:6:15"
+                        },
+                        "id": 35731,
+                        "nodeType": "InheritanceSpecifier",
+                        "src": "223:6:15"
+                    }
+                ],
+                "canonicalName": "DeployBasicEscrow",
+                "contractDependencies": [
+                    36015
+                ],
+                "contractKind": "contract",
+                "fullyImplemented": true,
+                "id": 35756,
+                "linearizedBaseContracts": [
+                    35756,
+                    100,
+                    9088,
+                    3225,
+                    1125,
+                    59,
+                    47
+                ],
+                "name": "DeployBasicEscrow",
+                "nameLocation": "202:17:15",
+                "nodeType": "ContractDefinition",
+                "nodes": [
+                    {
+                        "body": {
+                            "id": 35754,
+                            "nodeType": "Block",
+                            "src": "260:246:15",
+                            "statements": [
+                                {
+                                    "expression": {
+                                        "arguments": [],
+                                        "expression": {
+                                            "argumentTypes": [],
+                                            "expression": {
+                                                "id": 35734,
+                                                "name": "vm",
+                                                "nodeType": "Identifier",
+                                                "overloadedDeclarations": [],
+                                                "referencedDeclaration": 43,
+                                                "src": "270:2:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_contract$_Vm_$14368",
+                                                    "typeString": "contract Vm"
+                                                }
+                                            },
+                                            "id": 35736,
+                                            "isConstant": false,
+                                            "isLValue": false,
+                                            "isPure": false,
+                                            "lValueRequested": false,
+                                            "memberLocation": "273:14:15",
+                                            "memberName": "startBroadcast",
+                                            "nodeType": "MemberAccess",
+                                            "referencedDeclaration": 11269,
+                                            "src": "270:17:15",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                                                "typeString": "function () external"
+                                            }
+                                        },
+                                        "id": 35737,
+                                        "isConstant": false,
+                                        "isLValue": false,
+                                        "isPure": false,
+                                        "kind": "functionCall",
+                                        "lValueRequested": false,
+                                        "nameLocations": [],
+                                        "names": [],
+                                        "nodeType": "FunctionCall",
+                                        "src": "270:19:15",
+                                        "tryCall": false,
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_tuple$__$",
+                                            "typeString": "tuple()"
+                                        }
+                                    },
+                                    "id": 35738,
+                                    "nodeType": "ExpressionStatement",
+                                    "src": "270:19:15"
+                                },
+                                {
+                                    "assignments": [
+                                        35741
+                                    ],
+                                    "declarations": [
+                                        {
+                                            "constant": false,
+                                            "id": 35741,
+                                            "mutability": "mutable",
+                                            "name": "escrow",
+                                            "nameLocation": "307:6:15",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 35754,
+                                            "src": "300:13:15",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_contract$_Escrow_$36015",
+                                                "typeString": "contract Escrow"
+                                            },
+                                            "typeName": {
+                                                "id": 35740,
+                                                "nodeType": "UserDefinedTypeName",
+                                                "pathNode": {
+                                                    "id": 35739,
+                                                    "name": "Escrow",
+                                                    "nameLocations": [
+                                                        "300:6:15"
+                                                    ],
+                                                    "nodeType": "IdentifierPath",
+                                                    "referencedDeclaration": 36015,
+                                                    "src": "300:6:15"
+                                                },
+                                                "referencedDeclaration": 36015,
+                                                "src": "300:6:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_contract$_Escrow_$36015",
+                                                    "typeString": "contract Escrow"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "id": 35748,
+                                    "initialValue": {
+                                        "arguments": [
+                                            {
+                                                "hexValue": "307838613237453038393638443244453737616343453063383731453935303262373131323335323533",
+                                                "id": 35745,
+                                                "isConstant": false,
+                                                "isLValue": false,
+                                                "isPure": true,
+                                                "kind": "number",
+                                                "lValueRequested": false,
+                                                "nodeType": "Literal",
+                                                "src": "340:42:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                },
+                                                "value": "0x8a27E08968D2DE77acCE0c871E9502b711235253"
+                                            },
+                                            {
+                                                "hexValue": "307861664533426437343465664533383237333261384139433233366234313136354532343035443243",
+                                                "id": 35746,
+                                                "isConstant": false,
+                                                "isLValue": false,
+                                                "isPure": true,
+                                                "kind": "number",
+                                                "lValueRequested": false,
+                                                "nodeType": "Literal",
+                                                "src": "407:42:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                },
+                                                "value": "0xafE3Bd744efE382732a8A9C236b41165E2405D2C"
+                                            }
+                                        ],
+                                        "expression": {
+                                            "argumentTypes": [
+                                                {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                },
+                                                {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                }
+                                            ],
+                                            "id": 35744,
+                                            "isConstant": false,
+                                            "isLValue": false,
+                                            "isPure": false,
+                                            "lValueRequested": false,
+                                            "nodeType": "NewExpression",
+                                            "src": "316:10:15",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_function_creation_nonpayable$_t_address_$_t_address_$returns$_t_contract$_Escrow_$36015_$",
+                                                "typeString": "function (address,address) returns (contract Escrow)"
+                                            },
+                                            "typeName": {
+                                                "id": 35743,
+                                                "nodeType": "UserDefinedTypeName",
+                                                "pathNode": {
+                                                    "id": 35742,
+                                                    "name": "Escrow",
+                                                    "nameLocations": [
+                                                        "320:6:15"
+                                                    ],
+                                                    "nodeType": "IdentifierPath",
+                                                    "referencedDeclaration": 36015,
+                                                    "src": "320:6:15"
+                                                },
+                                                "referencedDeclaration": 36015,
+                                                "src": "320:6:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_contract$_Escrow_$36015",
+                                                    "typeString": "contract Escrow"
+                                                }
+                                            }
+                                        },
+                                        "id": 35747,
+                                        "isConstant": false,
+                                        "isLValue": false,
+                                        "isPure": false,
+                                        "kind": "functionCall",
+                                        "lValueRequested": false,
+                                        "nameLocations": [],
+                                        "names": [],
+                                        "nodeType": "FunctionCall",
+                                        "src": "316:154:15",
+                                        "tryCall": false,
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_contract$_Escrow_$36015",
+                                            "typeString": "contract Escrow"
+                                        }
+                                    },
+                                    "nodeType": "VariableDeclarationStatement",
+                                    "src": "300:170:15"
+                                },
+                                {
+                                    "expression": {
+                                        "arguments": [],
+                                        "expression": {
+                                            "argumentTypes": [],
+                                            "expression": {
+                                                "id": 35749,
+                                                "name": "vm",
+                                                "nodeType": "Identifier",
+                                                "overloadedDeclarations": [],
+                                                "referencedDeclaration": 43,
+                                                "src": "481:2:15",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_contract$_Vm_$14368",
+                                                    "typeString": "contract Vm"
+                                                }
+                                            },
+                                            "id": 35751,
+                                            "isConstant": false,
+                                            "isLValue": false,
+                                            "isPure": false,
+                                            "lValueRequested": false,
+                                            "memberLocation": "484:13:15",
+                                            "memberName": "stopBroadcast",
+                                            "nodeType": "MemberAccess",
+                                            "referencedDeclaration": 11285,
+                                            "src": "481:16:15",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
+                                                "typeString": "function () external"
+                                            }
+                                        },
+                                        "id": 35752,
+                                        "isConstant": false,
+                                        "isLValue": false,
+                                        "isPure": false,
+                                        "kind": "functionCall",
+                                        "lValueRequested": false,
+                                        "nameLocations": [],
+                                        "names": [],
+                                        "nodeType": "FunctionCall",
+                                        "src": "481:18:15",
+                                        "tryCall": false,
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_tuple$__$",
+                                            "typeString": "tuple()"
+                                        }
+                                    },
+                                    "id": 35753,
+                                    "nodeType": "ExpressionStatement",
+                                    "src": "481:18:15"
+                                }
+                            ]
+                        },
+                        "functionSelector": "c0406226",
+                        "id": 35755,
+                        "implemented": true,
+                        "kind": "function",
+                        "modifiers": [],
+                        "name": "run",
+                        "nameLocation": "245:3:15",
+                        "nodeType": "FunctionDefinition",
+                        "parameters": {
+                            "id": 35732,
+                            "nodeType": "ParameterList",
+                            "parameters": [],
+                            "src": "248:2:15"
+                        },
+                        "returnParameters": {
+                            "id": 35733,
+                            "nodeType": "ParameterList",
+                            "parameters": [],
+                            "src": "260:0:15"
+                        },
+                        "scope": 35756,
+                        "src": "236:270:15",
+                        "stateMutability": "nonpayable",
+                        "virtual": false,
+                        "visibility": "external"
+                    }
+                ],
+                "scope": 35757,
+                "src": "193:315:15",
+                "usedErrors": [],
+                "usedEvents": []
+            }
+        ],
+        "src": "32:476:15"
+    },
+    "functionHashes": {
+        "IS_SCRIPT()": "f8ccbf47",
+        "run()": "c0406226"
+    },
+    "gasEstimates": {
+        "creation": {
+            "codeDepositCost": "475200",
+            "executionCost": "24740",
+            "totalCost": "499940"
+        },
+        "external": {
+            "IS_SCRIPT()": "2299",
+            "run()": "infinite"
+        }
+    }
+}
