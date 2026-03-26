@@ -8,40 +8,19 @@ type TaskCreationPayload = {
   requestedAt: string;
 };
 
-type MatchSuggestion = {
-  title: string;
-  confidence: number;
-  summary: string;
-};
-
 type TaskCreationProps = {
-  onGenerateMatchmaking?: (
-    payload: TaskCreationPayload
-  ) => Promise<MatchSuggestion[]> | MatchSuggestion[];
+  isAuthenticated?: boolean;
+  onRequireAuthentication?: () => void;
+  onGenerateMatchmaking?: (payload: TaskCreationPayload) => Promise<void> | void;
 };
 
-const DEFAULT_RESULTS: MatchSuggestion[] = [
-  {
-    title: "Security Auditor Solidity Senior",
-    confidence: 96,
-    summary: "Experto en auditoria DeFi con enfoque en mitigacion de riesgos criticos.",
-  },
-  {
-    title: "Protocol Engineer DeFi",
-    confidence: 89,
-    summary: "Diseno de arquitectura y hardening de contratos para protocolos en produccion.",
-  },
-  {
-    title: "Smart Contract QA Specialist",
-    confidence: 82,
-    summary: "Cobertura de pruebas, fuzzing y validacion de escenarios de ataque.",
-  },
-];
-
-export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProps) {
+export default function TaskCreation({
+  isAuthenticated = false,
+  onRequireAuthentication,
+  onGenerateMatchmaking,
+}: TaskCreationProps) {
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "results">("idle");
-  const [results, setResults] = useState<MatchSuggestion[]>([]);
+  const [status, setStatus] = useState<"idle" | "loading">("idle");
   const [error, setError] = useState("");
 
   const canSubmit = useMemo(
@@ -51,6 +30,10 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
 
   const handleGenerate = async () => {
     if (!canSubmit) return;
+    if (!isAuthenticated) {
+      onRequireAuthentication?.();
+      return;
+    }
 
     setError("");
     setStatus("loading");
@@ -61,14 +44,8 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
     };
 
     try {
-      const generated =
-        (await onGenerateMatchmaking?.(payload)) ??
-        (await new Promise<MatchSuggestion[]>((resolve) => {
-          setTimeout(() => resolve(DEFAULT_RESULTS), 2200);
-        }));
-
-      setResults(generated);
-      setStatus("results");
+      await onGenerateMatchmaking?.(payload);
+      setStatus("idle");
     } catch {
       setError("No se pudo generar el matchmaking. Intenta nuevamente.");
       setStatus("idle");
@@ -78,80 +55,49 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
   return (
     <PageShell>
       <CenterColumn>
-        {status !== "results" ? (
-          <Card>
-            <HeaderRow>
-              <Eyebrow>Concierge IA</Eyebrow>
-              <StatusChip>Online</StatusChip>
-            </HeaderRow>
+        <Card>
+          <HeaderRow>
+            <Eyebrow>Concierge IA</Eyebrow>
+            <StatusChip>Online</StatusChip>
+          </HeaderRow>
 
-            <Title>Describe tu necesidad</Title>
-            <Subtitle>
-              Define los parametros del desafio tecnico para activar el flujo de matchmaking.
-            </Subtitle>
+          <Title>Describe tu necesidad</Title>
+          <Subtitle>
+            Define los parametros del desafio tecnico para activar el flujo de matchmaking.
+          </Subtitle>
 
-            <DescriptionArea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Ejemplo: Necesito un desarrollador para auditar contratos en Solidity para un protocolo DeFi, incluir pruebas de seguridad y recomendaciones de hardening..."
-              disabled={status === "loading"}
-              maxLength={2500}
-            />
+          <DescriptionArea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Ejemplo: Necesito un desarrollador para auditar contratos en Solidity para un protocolo DeFi, incluir pruebas de seguridad y recomendaciones de hardening..."
+            disabled={status === "loading"}
+            maxLength={2500}
+          />
 
-            <MetaRow>
-              <Hint>Minimo 20 caracteres para un analisis confiable.</Hint>
-              <Counter>{description.length}/2500</Counter>
-            </MetaRow>
+          <MetaRow>
+            <Hint>Minimo 20 caracteres para un analisis confiable.</Hint>
+            <Counter>{description.length}/2500</Counter>
+          </MetaRow>
 
-            {status === "loading" ? (
-              <LoadingBlock>
-                <LoaderDot />
-                <LoadingText>Gemini AI analizando requerimientos...</LoadingText>
-              </LoadingBlock>
-            ) : null}
+          {status === "loading" ? (
+            <LoadingBlock>
+              <LoaderDot />
+              <LoadingText>Gemini AI analizando requerimientos...</LoadingText>
+            </LoadingBlock>
+          ) : null}
 
-            {error ? <ErrorText>{error}</ErrorText> : null}
+          {!isAuthenticated ? (
+            <HintWarning>
+              Necesitas iniciar sesion o conectar wallet para generar matchmaking.
+            </HintWarning>
+          ) : null}
 
-            <ActionButton type="button" disabled={!canSubmit} onClick={handleGenerate}>
-              Generar Matchmaking con IA
-            </ActionButton>
-          </Card>
-        ) : (
-          <ResultsCard>
-            <HeaderRow>
-              <Eyebrow>Matchmaking Results</Eyebrow>
-              <StatusChip>$ {results.length} perfiles sugeridos</StatusChip>
-            </HeaderRow>
+          {error ? <ErrorText>{error}</ErrorText> : null}
 
-            <ResultsTitle>Talento recomendado para tu proyecto</ResultsTitle>
-            <ResultsSubtitle>
-              Transicion completada. Estos perfiles son una simulacion inicial lista para conectar
-              con la respuesta real del backend.
-            </ResultsSubtitle>
-
-            <ResultsList>
-              {results.map((candidate) => (
-                <ResultItem key={candidate.title}>
-                  <ResultTopLine>
-                    <ResultName>{candidate.title}</ResultName>
-                    <Confidence>{candidate.confidence}% fit</Confidence>
-                  </ResultTopLine>
-                  <ResultSummary>{candidate.summary}</ResultSummary>
-                </ResultItem>
-              ))}
-            </ResultsList>
-
-            <SecondaryAction
-              type="button"
-              onClick={() => {
-                setStatus("idle");
-                setResults([]);
-              }}
-            >
-              Crear otro requerimiento
-            </SecondaryAction>
-          </ResultsCard>
-        )}
+          <ActionButton type="button" disabled={!canSubmit} onClick={handleGenerate}>
+            Generar Matchmaking con IA
+          </ActionButton>
+        </Card>
       </CenterColumn>
     </PageShell>
   );
@@ -335,69 +281,8 @@ const ActionButton = styled.button`
   }
 `;
 
-const ResultsCard = styled(Card)`
-  padding-bottom: 22px;
-`;
-
-const ResultsTitle = styled.h2`
-  margin: 14px 0 8px;
-  color: #f5f4f9;
-  font-size: clamp(1.35rem, 2.8vw, 1.9rem);
-`;
-
-const ResultsSubtitle = styled.p`
-  margin: 0 0 18px;
-  color: rgba(245, 244, 249, 0.65);
-`;
-
-const ResultsList = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-`;
-
-const ResultItem = styled.li`
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #121218;
-`;
-
-const ResultTopLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 6px;
-`;
-
-const ResultName = styled.h3`
-  margin: 0;
-  color: #ffffff;
-  font-size: 0.98rem;
-`;
-
-const Confidence = styled.span`
-  color: #53e489;
-  font-size: 0.82rem;
-  font-weight: 700;
-`;
-
-const ResultSummary = styled.p`
-  margin: 0;
-  color: rgba(245, 244, 249, 0.7);
-  font-size: 0.9rem;
-  line-height: 1.45;
-`;
-
-const SecondaryAction = styled.button`
-  margin-top: 16px;
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: transparent;
-  color: #f5f4f9;
-  cursor: pointer;
+const HintWarning = styled.p`
+  margin: 12px 0 0;
+  color: rgba(245, 244, 249, 0.55);
+  font-size: 0.8rem;
 `;
