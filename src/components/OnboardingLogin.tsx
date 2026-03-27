@@ -35,7 +35,7 @@ export default function OnboardingLogin({
         <BrandContent>
           <LogoPill>
             <LogoIcon>✣</LogoIcon>
-            <LogoText>app_freelancer</LogoText>
+            <LogoText>koda</LogoText>
           </LogoPill>
 
           <Headline>

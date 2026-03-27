@@ -1,4 +1,3 @@
-//src/app/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -35,7 +34,7 @@ export default function Home() {
       {/* --- HEADER --- */}
       <Header>
         <HeaderLeft>
-          <Logo>FreelancerOS</Logo>
+          <Logo>koda</Logo>
           <DesktopNav>
             <NavLink href="#" $active>
               Discover
@@ -45,11 +44,7 @@ export default function Home() {
           </DesktopNav>
         </HeaderLeft>
         <HeaderRight>
-          <IconGroup>
-            <span>🔔</span>
-            <span>👤</span>
-          </IconGroup>
-          <Link href="/login" passHref>
+          <Link href="/login" passHref style={{ textDecoration: 'none' }}>
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>
         </HeaderRight>
@@ -67,7 +62,7 @@ export default function Home() {
             Gestiona tu carrera freelance con una infraestructura diseñada para la eficiencia.
           </HeroSubtitle>
           <HeroButtons>
-            <Link href="/create-task" passHref >
+            <Link href="/create-task" passHref legacyBehavior>
               <PrimaryHeroButton>✨ Descubrir con IA</PrimaryHeroButton>
             </Link>
             <SecondaryHeroButton>Explorar Proyectos</SecondaryHeroButton>
@@ -79,9 +74,6 @@ export default function Home() {
           <FeedHeader>
             <div>
               <SectionTitle>Proyectos Activos</SectionTitle>
-              <SectionSubtitle>
-                Oportunidades seleccionadas basadas en tu perfil tecnológico.
-              </SectionSubtitle>
             </div>
             <FilterIcons>
               <IconButton>⚙️</IconButton>
@@ -134,8 +126,8 @@ export default function Home() {
             {/* Card CTA */}
             <CTACard>
               <CTATitle>¿Tienes un proyecto?</CTATitle>
-              <CTASubtitle>Encuentra a los mejores expertos en minutos.</CTASubtitle>
-              <Link href="/create-task" passHref >
+              <CTASubtitle>Encontra a los mejores expertos en minutos.</CTASubtitle>
+              <Link href="" passHref style={{ textDecoration: 'none' }}>
                 <PublishButton>Publicar Ahora</PublishButton>
               </Link>
             </CTACard>
@@ -217,7 +209,7 @@ const IconGroup = styled.div`
   cursor: pointer;
 `;
 
-const LoginButton = styled.a`
+const LoginButton = styled.span`
   background: #7000e3;
   color: white;
   padding: 10px 24px;
@@ -225,6 +217,8 @@ const LoginButton = styled.a`
   font-weight: bold;
   text-decoration: none;
   transition: all 0.2s;
+  cursor: pointer;
+  display: inline-block;
   &:hover {
     filter: brightness(1.1);
   }
@@ -239,13 +233,13 @@ const Main = styled.main`
 
 // Hero Section
 const HeroSection = styled.section`
-  min-height: 800px;
+  /* Modificado para que no empuje tanto hacia abajo */
+  padding: 120px 24px 80px; 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 24px;
   background: radial-gradient(
     circle at 50% 50%,
     rgba(140, 59, 255, 0.1) 0%,
@@ -294,18 +288,26 @@ const HeroButtons = styled.div`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center; /* Alinea los botones verticalmente si envuelven */
 `;
 
 const PrimaryHeroButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px; /* Altura fija para que coincida perfecto con el secundario */
+  box-sizing: border-box;
   background: #8c3bff;
   color: white;
-  padding: 20px 40px;
+  padding: 0 40px;
   border-radius: 999px;
   font-size: 1.125rem;
   font-weight: bold;
   text-decoration: none;
   box-shadow: 0 0 30px rgba(140, 59, 255, 0.4);
   transition: all 0.2s;
+  cursor: pointer;
+  
   &:hover {
     box-shadow: 0 0 50px rgba(140, 59, 255, 0.6);
   }
@@ -315,15 +317,21 @@ const PrimaryHeroButton = styled.a`
 `;
 
 const SecondaryHeroButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px; /* Altura fija para igualarlo */
+  box-sizing: border-box;
   background: #1f1f24;
   border: 1px solid rgba(71, 70, 75, 0.2);
   color: white;
-  padding: 20px 40px;
+  padding: 0 40px;
   border-radius: 999px;
   font-size: 1.125rem;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
+  
   &:hover {
     background: #343439;
   }
@@ -333,7 +341,8 @@ const SecondaryHeroButton = styled.button`
 const FeedSection = styled.section`
   max-width: 1280px;
   margin: 0 auto;
-  padding: 96px 32px;
+  /* Reducido el padding de arriba para acercarlo a la Hero Section */
+  padding: 20px 32px 96px; 
 `;
 
 const FeedHeader = styled.div`
@@ -497,13 +506,15 @@ const CTASubtitle = styled.p`
   margin: 0 0 24px 0;
 `;
 
-const PublishButton = styled.a`
+const PublishButton = styled.span`
   background: white;
   color: #270057;
   padding: 12px;
   border-radius: 12px;
   font-weight: bold;
+  display: inline-block;
   text-decoration: none;
+  cursor: pointer;
   &:active {
     transform: scale(0.95);
   }

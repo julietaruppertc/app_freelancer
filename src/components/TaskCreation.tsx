@@ -49,7 +49,7 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
     <Container>
       <Header>
         <HeaderLeft>
-          <Logo>FreelancerOS</Logo>
+          <Logo>koda</Logo>
           <DesktopNav>
             <NavLink href="/" $active>Discover</NavLink>
             <NavLink href="#">Feed</NavLink>
