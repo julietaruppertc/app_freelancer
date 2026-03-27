@@ -8,7 +8,9 @@ import { useWallet } from "@/context/WalletContext"; // 🔥 IMPORTANTE
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextRoute = searchParams.get("next") || "/matchmaking";
+  
+  // 👇 ACÁ ESTÁ EL CAMBIO: Ahora el default es "/" (Home)
+  const nextRoute = searchParams.get("next") || "/";
 
   const { login, connecting } = useWallet(); // 🔥 TRAES LA WALLET
 

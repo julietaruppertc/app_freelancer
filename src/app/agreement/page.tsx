@@ -150,9 +150,12 @@ export default function AgreementScreen() {
 
   return (
     <PageContainer>
+      {/* HEADER GLOBAL (Estilo Koda) */}
       <HeaderBar>
         <HeaderLeft>
-          <Logo>FreelancerOS</Logo>
+          <Link href="/" passHref style={{ textDecoration: 'none' }}>
+            <Logo>koda</Logo>
+          </Link>
           <DesktopNav>
             <NavLink href="#" $active>Discover</NavLink>
             <NavLink href="#">Feed</NavLink>
@@ -160,14 +163,15 @@ export default function AgreementScreen() {
           </DesktopNav>
         </HeaderLeft>
         <HeaderRight>
-          <IconGroup><span>🔔</span><span>👤</span></IconGroup>
-          <Link href="/" passHref><LoginButton>Home</LoginButton></Link>
+          <Link href="/login" passHref style={{ textDecoration: 'none' }}>
+            <LoginButton>Iniciar Sesión</LoginButton>
+          </Link>
         </HeaderRight>
       </HeaderBar>
 
       <ContentWrapper>
         <Header>
-          <Title>Acuerdo Final del Proyecto</Title>
+          <Title>Acuerdo final del proyecto</Title>
           <Subtitle>
             Revisá los términos, conectá tu wallet y bloqueá los fondos en escrow.
           </Subtitle>
@@ -317,7 +321,10 @@ const HeaderBar = styled.header`
   padding:0 32px;z-index:50;border-bottom:1px solid rgba(255,255,255,.05);
 `;
 const HeaderLeft = styled.div`display:flex;align-items:center;gap:48px;`;
-const Logo = styled.span`font-size:1.5rem;font-weight:bold;color:white;`;
+const Logo = styled.span`
+  font-size:1.5rem;font-weight:bold;color:white;
+  letter-spacing:-0.5px;
+`;
 const DesktopNav = styled.nav`
   display:none;gap:32px;
   @media(min-width:768px){display:flex;}
@@ -326,13 +333,19 @@ const NavLink = styled.a<{ $active?: boolean }>`
   text-decoration:none;
   font-weight:${(p) => p.$active ? 'bold' : 'normal'};
   color:${(p) => p.$active ? '#8C3BFF' : '#9ca3af'};
+  border-bottom:${(p) => p.$active ? '2px solid #8C3BFF' : 'none'};
+  padding-bottom:4px;
+  transition:color 0.2s;
   &:hover{color:white;}
 `;
 const HeaderRight = styled.div`display:flex;align-items:center;gap:24px;`;
-const IconGroup = styled.div`display:flex;gap:16px;font-size:1.2rem;`;
-const LoginButton = styled.a`
-  background:#7000e3;color:white;padding:10px 22px;
+const IconGroup = styled.div`display:flex;gap:16px;font-size:1.2rem;cursor:pointer;`;
+const LoginButton = styled.span`
+  background:#7000e3;color:white;padding:10px 24px;
   border-radius:12px;font-weight:bold;text-decoration:none;
+  transition:all 0.2s;cursor:pointer;display:inline-block;
+  &:hover{filter:brightness(1.1);}
+  &:active{transform:scale(0.95);}
 `;
 const Header = styled.header`text-align:left;`;
 const Title = styled.h1`font-size:2rem;font-weight:bold;color:#fff;margin:0 0 8px;`;
@@ -407,7 +420,6 @@ const SignButton = styled.button<{ $isSigned: boolean }>`
   &:disabled{opacity:.5;cursor:not-allowed;}
 `;
 
-// ESTILOS DEL NUEVO BOTÓN
 const ReleaseButton = styled.button`
   width: 100%;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
