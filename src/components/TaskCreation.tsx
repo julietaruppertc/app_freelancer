@@ -61,7 +61,7 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
             <span>🔔</span>
             <span>👤</span>
           </IconGroup>
-          <Link href="/login" passHref legacyBehavior>
+          <Link href="/login" >
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>
         </HeaderRight>

@@ -1,4 +1,4 @@
-// provider.ts
+// blockchain/provider.ts
 import { ethers } from 'ethers';
 
 // Agregá esto arriba de todo en provider.ts

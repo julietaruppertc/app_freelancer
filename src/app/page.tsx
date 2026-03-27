@@ -67,7 +67,7 @@ export default function Home() {
             Gestiona tu carrera freelance con una infraestructura diseñada para la eficiencia.
           </HeroSubtitle>
           <HeroButtons>
-            <Link href="/create-task" passHref legacyBehavior>
+            <Link href="/create-task" passHref >
               <PrimaryHeroButton>✨ Descubrir con IA</PrimaryHeroButton>
             </Link>
             <SecondaryHeroButton>Explorar Proyectos</SecondaryHeroButton>
@@ -135,7 +135,7 @@ export default function Home() {
             <CTACard>
               <CTATitle>¿Tienes un proyecto?</CTATitle>
               <CTASubtitle>Encuentra a los mejores expertos en minutos.</CTASubtitle>
-              <Link href="/create-task" passHref legacyBehavior>
+              <Link href="/create-task" passHref >
                 <PublishButton>Publicar Ahora</PublishButton>
               </Link>
             </CTACard>
