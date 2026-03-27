@@ -1,10 +1,8 @@
-//src/app/layout.tsx
-
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-// 1. Importamos el provider que creamos
 import { WalletProvider } from "@/context/WalletContext";
+import StyledComponentsRegistry from "./registry";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        {/* 2. Envolvemos el children para que TODO el sitio tenga acceso a la wallet */}
-        <WalletProvider>
-          {children}
-        </WalletProvider>
+        <StyledComponentsRegistry>
+          <WalletProvider>
+            {children}
+          </WalletProvider>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
