@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useMemo, useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import React, { useMemo, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type TaskCreationPayload = {
   description: string;
@@ -14,55 +14,44 @@ type TaskCreationProps = {
   onGenerateMatchmaking?: (payload: TaskCreationPayload) => Promise<void> | void;
 };
 
-export default function TaskCreation({
-  onGenerateMatchmaking,
-}: TaskCreationProps) {
+export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProps) {
   const router = useRouter();
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading">("idle");
-  const [error, setError] = useState("");
+  const [description, setDescription] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading'>('idle');
+  const [error, setError] = useState('');
 
   const canSubmit = useMemo(
-    () => description.trim().length >= 20 && status !== "loading",
+    () => description.trim().length >= 20 && status !== 'loading',
     [description, status]
   );
 
   const handleGenerate = async () => {
     if (!canSubmit) return;
-
-    setError("");
-    setStatus("loading");
-
+    setError('');
+    setStatus('loading');
     const payload: TaskCreationPayload = {
       description: description.trim(),
       requestedAt: new Date().toISOString(),
     };
-
     try {
       if (onGenerateMatchmaking) {
         await onGenerateMatchmaking(payload);
+      } else {
+        router.push(`/matchmaking?query=${encodeURIComponent(description)}`);
       }
-      
-      setStatus("idle");
-      // Redirigimos a la página de resultados pasando el requerimiento por URL
-      router.push(`/matchmaking?query=${encodeURIComponent(description)}`);
-      
     } catch {
-      setError("No se pudo generar el matchmaking. Intenta nuevamente.");
-      setStatus("idle");
+      setError('No se pudo generar el matchmaking. Intenta nuevamente.');
+      setStatus('idle');
     }
   };
 
   return (
     <Container>
-      {/* --- HEADER (Idéntico al del Home) --- */}
       <Header>
         <HeaderLeft>
-          <Logo>Vendimia Tech</Logo>
+          <Logo>FreelancerOS</Logo>
           <DesktopNav>
-            <NavLink href="#" $active>
-              Discover
-            </NavLink>
+            <NavLink href="/" $active>Discover</NavLink>
             <NavLink href="#">Feed</NavLink>
             <NavLink href="#">Messages</NavLink>
           </DesktopNav>
@@ -78,7 +67,6 @@ export default function TaskCreation({
         </HeaderRight>
       </Header>
 
-      {/* --- MAIN CONTENT --- */}
       <Main>
         <PageShell>
           <CenterColumn>
@@ -87,34 +75,28 @@ export default function TaskCreation({
                 <Eyebrow>Concierge IA</Eyebrow>
                 <StatusChip>Online</StatusChip>
               </HeaderRow>
-
               <Title>Describe tu necesidad</Title>
               <Subtitle>
-                Define los parametros del desafio tecnico para activar el flujo de matchmaking.
+                Define los parámetros del desafío técnico para activar el flujo de matchmaking.
               </Subtitle>
-
               <DescriptionArea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Ejemplo: Necesito un desarrollador para auditar contratos en Solidity para un protocolo DeFi, incluir pruebas de seguridad y recomendaciones de hardening..."
-                disabled={status === "loading"}
+                disabled={status === 'loading'}
                 maxLength={2500}
               />
-
               <MetaRow>
-                <Hint>Minimo 20 caracteres para un analisis confiable.</Hint>
+                <Hint>Mínimo 20 caracteres para un análisis confiable.</Hint>
                 <Counter>{description.length}/2500</Counter>
               </MetaRow>
-
-              {status === "loading" ? (
+              {status === 'loading' && (
                 <LoadingBlock>
                   <LoaderDot />
                   <LoadingText>Gemini AI analizando requerimientos...</LoadingText>
                 </LoadingBlock>
-              ) : null}
-
-              {error ? <ErrorText>{error}</ErrorText> : null}
-
+              )}
+              {error && <ErrorText>{error}</ErrorText>}
               <ActionButton type="button" disabled={!canSubmit} onClick={handleGenerate}>
                 Generar Matchmaking con IA
               </ActionButton>

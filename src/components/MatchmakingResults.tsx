@@ -1,56 +1,29 @@
-"use client";
+'use client';
 
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { MatchedFreelancer } from '@/ia/matchServices';
 
-// 1. Definimos qué es un Candidato
-export type Candidate = {
-  id: string;
-  name: string;
-  role: string;
-  description: string;
-  skills: string[];
-  matchScore: number;
-  avatar?: string;
-  easAttestations?: string;
-};
-
-// 2. Definimos qué datos recibe la pantalla
 export type MatchmakingResultsProps = {
-  isAuthenticated?: boolean;
   query: string;
-  results: Candidate[];
-  status: "success" | "loading" | "error" | "empty";
+  results: MatchedFreelancer[];
+  status: 'success' | 'loading' | 'error' | 'empty';
 };
 
-export default function MatchmakingResults({ 
-  isAuthenticated = false,
-  query,
-  results,
-  status
-}: MatchmakingResultsProps) {
-  
-  const getInitials = (name: string) => {
-    return name.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
-  };
-
+export default function MatchmakingResults({ query, results, status }: MatchmakingResultsProps) {
   return (
     <Shell>
       <Sidebar>
-        <Brand>FreelanceOS</Brand>
+        <Brand>FreelancerOS</Brand>
         <SideMeta>Project Dashboard</SideMeta>
-
-        <NewJobButton>+ Post New Job</NewJobButton>
-
+        <NewJobButton onClick={() => (window.location.href = '/create-task')}>
+          + Nueva Búsqueda
+        </NewJobButton>
         <NavList>
           <NavItem $active>IA Matchmaking</NavItem>
-          <NavItem>Basic Escrow</NavItem>
-          <NavItem>EIP-712 Signing</NavItem>
-          {isAuthenticated ? <NavItem>Milestones</NavItem> : null}
-          {isAuthenticated ? <NavItem>Messages</NavItem> : null}
-          {isAuthenticated ? <NavItem>Wallet</NavItem> : null}
+          <NavItem>Escrow</NavItem>
+          <NavItem>EIP-712</NavItem>
         </NavList>
-
         <DisabledList>
           <DisabledTitle>Phase 2/3 (Disabled)</DisabledTitle>
           <DisabledItem>Kleros Arbitration</DisabledItem>
@@ -60,85 +33,115 @@ export default function MatchmakingResults({
 
       <Content>
         <Headline>IA Matchmaking: Resultados</Headline>
-        <Subhead>
-          Requerimiento analizado: <strong>"{query}"</strong> <br/>
-          Candidatos priorizados por evidencia on-chain, score de confianza y performance en proyectos similares.
-        </Subhead>
 
-        {status === "loading" && (
+        {query && (
+          <Subhead>
+            Requerimiento analizado: <strong>&quot;{query}&quot;</strong>
+            <br />
+            Candidatos ordenados por porcentaje de coincidencia de skills.
+          </Subhead>
+        )}
+
+        {status === 'loading' && (
           <StateMessage>Analizando perfiles con IA...</StateMessage>
         )}
 
-        {status === "error" && (
-          <StateMessage $error>Hubo un problema al procesar el matchmaking. Intenta nuevamente.</StateMessage>
+        {status === 'error' && (
+          <StateMessage $error>
+            Hubo un problema al procesar el matchmaking. Revisá la consola para más detalles.
+          </StateMessage>
         )}
 
-        {status === "empty" && (
-          <StateMessage>Por favor, ingresa un requerimiento para buscar talento.</StateMessage>
+        {status === 'empty' && (
+          <StateMessage>Ingresá un requerimiento para buscar talento.</StateMessage>
         )}
 
-        {status === "success" && (
-          <CardsGrid>
+        {status === 'success' && (
+          <>
             {results.length === 0 ? (
-              <StateMessage>No se encontraron freelancers que coincidan con tu búsqueda.</StateMessage>
+              <StateMessage>
+                No se encontraron freelancers que coincidan. Probá con otros términos.
+              </StateMessage>
             ) : (
-              results.map((candidate) => (
-                <FreelancerCard key={candidate.id}>
-                  <IdentityRow>
-                    <Avatar>{candidate.avatar || getInitials(candidate.name)}</Avatar>
-                    <IdentityText>
-                      <Name>{candidate.name}</Name>
-                      <Role>{candidate.role}</Role>
-                    </IdentityText>
-                    <EasBadge>Atribuciones Web3 (EAS)</EasBadge>
-                  </IdentityRow>
+              <CardsGrid>
+                {results.map((f) => (
+                  <FreelancerCard key={`${f.id_usuario}-${f.id_servicio}`}>
 
-                  <MetricsRow>
-                    <MatchBadge>{candidate.matchScore}% Match</MatchBadge>
-                    <ScoreBlock>
-                      <ScoreLabel>
-                        Score de Confianza <span>{candidate.matchScore}/100</span>
-                      </ScoreLabel>
-                      <ScoreTrack>
-                        <ScoreFill $value={candidate.matchScore} />
-                      </ScoreTrack>
-                    </ScoreBlock>
-                  </MetricsRow>
+                    <IdentityRow>
+                      <Avatar>{getInitials(f.nombre)}</Avatar>
+                      <IdentityText>
+                        <Name>{f.nombre}</Name>
+                        <Role>{f.titulo}</Role>
+                      </IdentityText>
+                      <EasBadge>Atribuciones Web3 (EAS)</EasBadge>
+                    </IdentityRow>
 
-                  <Bio>{candidate.description}</Bio>
-                  
-                  <SkillsRow>
-                     {candidate.skills.map(skill => (
-                       <SkillTag key={skill}>{skill}</SkillTag>
-                     ))}
-                  </SkillsRow>
+                    <MetricsRow>
+                      <MatchBadge>{f.match_score}% Match</MatchBadge>
+                      <ScoreBlock>
+                        <ScoreLabel>
+                          Score de Confianza <span>{f.score_confianza ?? '—'}/100</span>
+                        </ScoreLabel>
+                        <ScoreTrack>
+                          <ScoreFill $value={f.score_confianza ?? 0} />
+                        </ScoreTrack>
+                      </ScoreBlock>
+                    </MetricsRow>
 
-                  <AttestationText>{candidate.easAttestations || "Verificando atestaciones..."}</AttestationText>
+                    {f.descripcion && <Bio>{f.descripcion}</Bio>}
 
-                  <ViewButton type="button">Ver Perfil Completo</ViewButton>
-                </FreelancerCard>
-              ))
+                    <SkillsRow>
+                      {(f.skills ?? []).map((skill: string) => {
+                        const matched = (f.matched_skills ?? []).includes(skill);
+                        return (
+                          <SkillTag key={skill} $matched={matched}>
+                            {matched ? '✓ ' : ''}{skill}
+                          </SkillTag>
+                        );
+                      })}
+                    </SkillsRow>
+
+                    <FooterRow>
+                      <Price>
+                        {f.precio_base != null ? `$${f.precio_base.toLocaleString()}` : '—'}
+                      </Price>
+                      <ViewButton type="button">Ver Perfil Completo</ViewButton>
+                    </FooterRow>
+
+                  </FreelancerCard>
+                ))}
+              </CardsGrid>
             )}
-          </CardsGrid>
-        )}
 
-        {status === "success" && results.length > 0 && (
-          <FooterCta>
-            <FooterTitle>Listo para escalar tu proyecto?</FooterTitle>
-            <TelegramButton type="button">
-              <TelegramIcon aria-hidden="true">✈</TelegramIcon>
-              Solicitar Entrevista (Telegram)
-            </TelegramButton>
-          </FooterCta>
+            {results.length > 0 && (
+              <FooterCta>
+                <FooterTitle>¿Listo para arrancar?</FooterTitle>
+                <TelegramButton type="button">
+                  <TelegramIcon aria-hidden="true">✈</TelegramIcon>
+                  Solicitar Entrevista (Telegram)
+                </TelegramButton>
+              </FooterCta>
+            )}
+          </>
         )}
       </Content>
     </Shell>
   );
 }
 
+function getInitials(name: string) {
+  return (name ?? '')
+    .split(' ')
+    .map((n) => n[0] ?? '')
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+}
+
 // ==========================================
-// STYLED COMPONENTS 
+// STYLED COMPONENTS
 // ==========================================
+
 const Shell = styled.main`
   min-height: 100vh;
   background: #1c1c1f;
@@ -196,8 +199,8 @@ const NavItem = styled.button<{ $active?: boolean }>`
   text-align: left;
   border: none;
   border-radius: 7px;
-  background: ${(props) => (props.$active ? "rgba(140, 59, 255, 0.18)" : "transparent")};
-  color: ${(props) => (props.$active ? "#f3ebff" : "rgba(243, 242, 247, 0.64)")};
+  background: ${(p) => (p.$active ? 'rgba(140, 59, 255, 0.18)' : 'transparent')};
+  color: ${(p) => (p.$active ? '#f3ebff' : 'rgba(243, 242, 247, 0.64)')};
   font-size: 0.8rem;
   padding: 0 10px;
   cursor: pointer;
@@ -246,9 +249,9 @@ const Subhead = styled.p`
 const StateMessage = styled.div<{ $error?: boolean }>`
   padding: 20px;
   border-radius: 12px;
-  background: ${(props) => (props.$error ? 'rgba(255, 89, 89, 0.1)' : 'rgba(140, 59, 255, 0.1)')};
-  color: ${(props) => (props.$error ? '#ff5959' : '#e3d2ff')};
-  border: 1px solid ${(props) => (props.$error ? 'rgba(255, 89, 89, 0.2)' : 'rgba(140, 59, 255, 0.2)')};
+  background: ${(p) => (p.$error ? 'rgba(255, 89, 89, 0.1)' : 'rgba(140, 59, 255, 0.1)')};
+  color: ${(p) => (p.$error ? '#ff5959' : '#e3d2ff')};
+  border: 1px solid ${(p) => (p.$error ? 'rgba(255, 89, 89, 0.2)' : 'rgba(140, 59, 255, 0.2)')};
   text-align: center;
   margin-bottom: 24px;
 `;
@@ -263,6 +266,11 @@ const FreelancerCard = styled.article`
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 16px;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: rgba(140, 59, 255, 0.45);
+  }
 `;
 
 const IdentityRow = styled.div`
@@ -282,22 +290,30 @@ const Avatar = styled.div`
   font-weight: 700;
   color: #ffffff;
   background: linear-gradient(135deg, #8c3bff 0%, #5f2bb5 100%);
+  flex-shrink: 0;
 `;
 
 const IdentityText = styled.div`
-  min-width: 220px;
+  flex: 1;
+  min-width: 0;
 `;
 
 const Name = styled.h3`
   margin: 0;
   color: #f3f2f7;
   font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Role = styled.p`
   margin: 2px 0 0;
   color: rgba(243, 242, 247, 0.62);
   font-size: 0.82rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const EasBadge = styled.span`
@@ -309,6 +325,7 @@ const EasBadge = styled.span`
   color: #e3d2ff;
   font-size: 0.72rem;
   font-weight: 700;
+  flex-shrink: 0;
 `;
 
 const MetricsRow = styled.div`
@@ -328,6 +345,7 @@ const MatchBadge = styled.span`
   color: #53e489;
   font-size: 0.82rem;
   font-weight: 800;
+  flex-shrink: 0;
 `;
 
 const ScoreBlock = styled.div`
@@ -357,7 +375,7 @@ const ScoreTrack = styled.div`
 
 const ScoreFill = styled.div<{ $value: number }>`
   height: 100%;
-  width: ${(props) => `${props.$value}%`};
+  width: ${(p) => Math.min(p.$value, 100)}%;
   border-radius: 999px;
   background: #53e489;
   transition: width 1s ease-in-out;
@@ -367,6 +385,11 @@ const Bio = styled.p`
   margin: 14px 0 8px;
   color: rgba(243, 242, 247, 0.72);
   line-height: 1.5;
+  font-size: 0.85rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const SkillsRow = styled.div`
@@ -376,24 +399,30 @@ const SkillsRow = styled.div`
   margin-bottom: 12px;
 `;
 
-const SkillTag = styled.span`
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #a2a2ab;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
+const SkillTag = styled.span<{ $matched?: boolean }>`
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 600;
+  background: ${(p) => (p.$matched ? 'rgba(83, 228, 137, 0.15)' : 'rgba(255, 255, 255, 0.05)')};
+  color: ${(p) => (p.$matched ? '#53e489' : '#a2a2ab')};
+  border: 1px solid ${(p) => (p.$matched ? 'rgba(83, 228, 137, 0.35)' : 'rgba(255, 255, 255, 0.1)')};
 `;
 
-const AttestationText = styled.p`
-  margin: 0;
-  color: #53e489;
-  font-size: 0.8rem;
+const FooterRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+`;
+
+const Price = styled.div`
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #f3f2f7;
 `;
 
 const ViewButton = styled.button`
-  margin-top: 12px;
   min-height: 36px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.22);
@@ -402,8 +431,9 @@ const ViewButton = styled.button`
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  padding: 0 14px;
   transition: background 0.2s;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
