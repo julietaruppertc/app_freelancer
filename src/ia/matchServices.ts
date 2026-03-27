@@ -2,10 +2,6 @@
 import { supabase } from './supabaseClient';
 import { extractSkillsFromText } from './gemini.service';
 
-/**
- * Resultado que devuelve la RPC match_services_by_skills.
- * Asegurate de que tu función SQL devuelva estas columnas.
- */
 export interface MatchedFreelancer {
   id_usuario: number;
   nombre: string;
@@ -15,17 +11,11 @@ export interface MatchedFreelancer {
   titulo: string;
   descripcion: string;
   precio_base: number;
-  skills: string[];       // nombres de skills del servicio
-  matched_skills: string[]; // skills que coincidieron con el pedido
-  match_score: number;    // porcentaje de match 0-100
+  skills: string[];
+  matched_skills: string[];
+  match_score: number;
 }
 
-/**
- * Pipeline completo:
- * 1. Gemini extrae skills del texto libre
- * 2. Supabase RPC busca servicios que coincidan
- * 3. Devuelve lista ordenada por match_score DESC
- */
 export async function getMatchedFreelancers(query: string): Promise<MatchedFreelancer[]> {
   // 1. IA → skills requeridas
   const requiredSkills = await extractSkillsFromText(query);
@@ -49,6 +39,34 @@ export async function getMatchedFreelancers(query: string): Promise<MatchedFreel
 
   if (!data || data.length === 0) return [];
 
-  // 3. Ordenar por match_score (la RPC debería devolver esto, pero lo garantizamos)
-  return (data as MatchedFreelancer[]).sort((a, b) => b.match_score - a.match_score);
+  let results = data as MatchedFreelancer[];
+
+  // 🚀 PARCHE HACKATHON: Como la RPC no trae el nombre del usuario, lo buscamos en la tabla 'usuario'
+  if (results.length > 0) {
+    console.log("Buscando nombres de los freelancers...");
+    
+    // Sacamos todos los IDs únicos de los freelancers que devolvió la IA
+    const userIds = [...new Set(results.map(r => r.id_usuario))];
+    
+    // Hacemos una consulta rapidísima a tu tabla 'usuario'
+    const { data: usersData, error: userError } = await supabase
+      .from('usuario')
+      .select('id_usuario, nombre')
+      .in('id_usuario', userIds);
+      
+    if (!userError && usersData) {
+      // Le inyectamos el nombre real de Satoshi Dev, Vitalik Front, etc. a las tarjetas
+      results = results.map(r => {
+        const user = usersData.find(u => u.id_usuario === r.id_usuario);
+        return {
+          ...r,
+          // Si encuentra el usuario le pone el nombre, si no le pone "Freelancer Anónimo"
+          nombre: user && user.nombre ? user.nombre : 'Freelancer Anónimo',
+        };
+      });
+    }
+  }
+
+  // 3. Ordenar por match_score
+  return results.sort((a, b) => b.match_score - a.match_score);
 }

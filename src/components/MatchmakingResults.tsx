@@ -96,8 +96,9 @@ export default function MatchmakingResults({ query, results, status }: Matchmaki
                       <IdentityRow>
                         <Avatar>{getInitials(f.nombre)}</Avatar>
                         <IdentityText>
-                          <Name>{f.nombre}</Name>
-                          <Role>{f.titulo}</Role>
+                          {/* ACÁ ESTÁ EL CAMBIO: Título arriba, nombre abajo */}
+                          <ServiceTitle>{f.titulo}</ServiceTitle>
+                          <FreelancerName>{f.nombre}</FreelancerName>
                         </IdentityText>
                         <EasBadge>Atribuciones Web3 (EAS)</EasBadge>
                       </IdentityRow>
@@ -250,7 +251,7 @@ const LoginButton = styled.span`
 
 // -- Layout Principal --
 const Shell = styled.main`
-  padding-top: 80px; /* Compensa la altura del header fijo */
+  padding-top: 80px;
   min-height: 100vh;
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -264,9 +265,9 @@ const Sidebar = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: calc(100vh - 80px); /* Ocupa el alto exacto de la pantalla menos el header */
+  height: calc(100vh - 80px);
   position: sticky;
-  top: 80px; /* Se queda pegado justo debajo del header */
+  top: 80px;
 `;
 
 const SideTop = styled.div`
@@ -339,9 +340,11 @@ const Avatar = styled.div`
   font-size:.9rem;font-weight:700;color:#fff;
   background:linear-gradient(135deg,#8c3bff 0%,#5f2bb5 100%);flex-shrink:0;
 `;
+
 const IdentityText = styled.div`flex:1;min-width:0;`;
-const Name = styled.h3`margin:0;color:#f3f2f7;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
-const Role = styled.p`margin:4px 0 0;color:rgba(243,242,247,.62);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
+const ServiceTitle = styled.h3`margin:0;color:#f3f2f7;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
+const FreelancerName = styled.p`margin:4px 0 0;color:rgba(243,242,247,.62);font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
+
 const EasBadge = styled.span`
   margin-left:auto;border-radius:999px;padding:6px 12px;
   background:rgba(140,59,255,.16);border:1px solid rgba(140,59,255,.62);

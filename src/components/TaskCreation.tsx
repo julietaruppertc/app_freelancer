@@ -70,7 +70,6 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
           <CenterColumn>
             <Card>
               <HeaderRow>
-                <Eyebrow>Concierge IA</Eyebrow>
                 <StatusChip>Online</StatusChip>
               </HeaderRow>
               <Title>Describe tu necesidad</Title>
