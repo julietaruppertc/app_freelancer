@@ -34,7 +34,6 @@ export default function MatchmakingResults({ query, results, status }: Matchmaki
           </DesktopNav>
         </HeaderLeft>
         <HeaderRight>
-          <IconGroup><span>🔔</span><span>👤</span></IconGroup>
           <Link href="/login" passHref style={{ textDecoration: 'none' }}>
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>

@@ -59,10 +59,6 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
           </DesktopNav>
         </HeaderLeft>
         <HeaderRight>
-          <IconGroup>
-            <span>🔔</span>
-            <span>👤</span>
-          </IconGroup>
           <Link href="/login" >
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>
