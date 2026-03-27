@@ -49,7 +49,9 @@ export default function TaskCreation({ onGenerateMatchmaking }: TaskCreationProp
     <Container>
       <Header>
         <HeaderLeft>
-          <Logo>koda</Logo>
+          <Link href="/" passHref style={{ textDecoration: 'none' }}>
+            <Logo>koda</Logo>
+          </Link>
           <DesktopNav>
             <NavLink href="/" $active>Discover</NavLink>
             <NavLink href="#">Feed</NavLink>

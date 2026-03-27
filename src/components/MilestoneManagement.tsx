@@ -63,7 +63,9 @@ export default function MilestoneManagement({ isAuthenticated = false }: Milesto
       {/* --- HEADER GLOBAL (Igual que en Home y Agreement) --- */}
       <HeaderBar>
         <HeaderLeft>
-          <Logo>Koda</Logo>
+          <Link href="/" passHref style={{ textDecoration: 'none' }}>
+            <Logo>koda</Logo>
+          </Link>
           <DesktopNav>
             <NavLink href="#" $active>Discover</NavLink>
             <NavLink href="#">Feed</NavLink>

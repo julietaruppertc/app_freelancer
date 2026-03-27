@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Freelance App - Hackathon MVP",
-  description: "IA + Web3 Freelancing",
+  title: "Koda",
+  description: "La infraestructura definitiva para el arquitecto digital moderno. Matchmaking con IA y pagos seguros mediante Smart Contracts.",
 };
 
 export default function RootLayout({

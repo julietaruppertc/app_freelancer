@@ -34,7 +34,9 @@ export default function Home() {
       {/* --- HEADER --- */}
       <Header>
         <HeaderLeft>
-          <Logo>koda</Logo>
+          <Link href="/" passHref style={{ textDecoration: 'none' }}>
+            <Logo>koda</Logo>
+          </Link>
           <DesktopNav>
             <NavLink href="#" $active>
               Discover

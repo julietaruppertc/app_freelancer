@@ -58,6 +58,9 @@ export default function OnboardingLogin({
 
       <AuthPane>
         <AuthContent>
+          {/* NUEVO BOTÓN PARA VOLVER ATRÁS */}
+          <BackButton href="/">← Volver al inicio</BackButton>
+
           <AuthTitle>Bienvenido de nuevo</AuthTitle>
           <AuthSubtitle>Accede a tu panel de control profesional.</AuthSubtitle>
 
@@ -239,6 +242,22 @@ const AuthPane = styled.section`
 
 const AuthContent = styled.div`
   width: min(360px, 100%);
+`;
+
+// ESTILOS DEL NUEVO BOTÓN
+const BackButton = styled(Link)`
+  display: inline-flex;
+  align-items: center;
+  color: rgba(247, 247, 251, 0.5);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #f7f7fb;
+  }
 `;
 
 const AuthTitle = styled.h2`
