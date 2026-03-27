@@ -1,5 +1,3 @@
-//src/app/agreement/page.tsx
-
 "use client";
 
 import React, { useState } from "react";
@@ -8,10 +6,11 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useWallet } from "@/context/WalletContext";
 import { useAgreementData } from "./useAgreementData";
-import { createEscrow } from "@blockchain/escrow";
 import { hashAgreement } from "@blockchain/utils";
 import { supabase } from "@/ia/supabaseClient";
 import { ethers } from 'ethers';
+// Ya importamos createEscrow y approveWork
+import { createEscrow, approveWork } from "@blockchain/escrow";
 
 // Wallet del árbitro del equipo para la hackathon
 const ARBITER_ADDRESS = "0x8a27E08968D2DE77acCE0c871E9502b711235253";
@@ -33,9 +32,12 @@ export default function AgreementScreen() {
     servicio?.descripcion ?? ""
   );
 
-  // Estado de la transacción
+  // Estado de la transacción (Aquí agregué los de liberación de pago)
   const [isSigning, setIsSigning] = useState(false);
   const [isSigned, setIsSigned] = useState(false);
+  const [isReleasing, setIsReleasing] = useState(false);
+  const [isReleased, setIsReleased] = useState(false);
+  
   const [txHash, setTxHash] = useState<string | null>(null);
   const [signError, setSignError] = useState<string | null>(null);
 
@@ -47,77 +49,104 @@ export default function AgreementScreen() {
     !!specifications;
 
   const handleSign = async () => {
-  if (!canSign || !freelancer || !servicio) return;
-  setIsSigning(true);
-  setSignError(null);
+    if (!canSign || !freelancer || !servicio) return;
+    setIsSigning(true);
+    setSignError(null);
 
-  try {
-    // Sanitizar addresses — elimina espacios y caracteres invisibles
-    const freelancerWallet = freelancer.wallet.trim().replace(/[^\x20-\x7E]/g, '');
-    const clientAddress = address!.trim().replace(/[^\x20-\x7E]/g, '');
+    try {
+      // Sanitizar addresses — elimina espacios y caracteres invisibles
+      const freelancerWallet = freelancer.wallet.trim().replace(/[^\x20-\x7E]/g, '');
+      const clientAddress = address!.trim().replace(/[^\x20-\x7E]/g, '');
 
-    if (!freelancerWallet || !ethers.isAddress(freelancerWallet)) {
-      setSignError(`Wallet del freelancer inválida: "${freelancer.wallet}"`);
+      if (!freelancerWallet || !ethers.isAddress(freelancerWallet)) {
+        setSignError(`Wallet del freelancer inválida: "${freelancer.wallet}"`);
+        setIsSigning(false);
+        return;
+      }
+
+      if (!ethers.isAddress(ARBITER_ADDRESS)) {
+        setSignError("ARBITER_ADDRESS no configurado correctamente");
+        setIsSigning(false);
+        return;
+      }
+
+      const agreementText = JSON.stringify({
+        client: clientAddress,
+        freelancer: freelancerWallet,
+        servicioId: servicio.id_servicio,
+        budget,
+        deadlineDays,
+        specifications,
+        timestamp: Date.now(),
+      });
+      const agreementHash = hashAgreement(agreementText);
+
+      const deadlineTimestamp =
+        Math.floor(Date.now() / 1000) + parseInt(deadlineDays) * 86400;
+
+      const receipt = await createEscrow(
+        freelancerWallet,      // ← sanitizada
+        ARBITER_ADDRESS.trim(),
+        deadlineTimestamp,
+        agreementHash,
+        budget
+      );
+
+      const onchainId = receipt.hash ?? receipt.transactionHash;
+      setTxHash(onchainId);
+
+      const { data: clienteData } = await supabase
+        .from('usuario')
+        .select('id_usuario')
+        .eq('wallet', clientAddress)
+        .single();
+
+      await supabase.from('acuerdos_escrow').insert({
+        id_servicio: servicio.id_servicio,
+        id_cliente: clienteData?.id_usuario ?? null,
+        id_freelancer: freelancer.id_usuario,
+        requisitos: specifications,
+        precio_final: parseFloat(budget),
+        deadline: new Date(deadlineTimestamp * 1000).toISOString(),
+        hash_requi: agreementHash,
+        id_escrow_onchain: onchainId,
+        id_estado_escrow: 2,
+      });
+
+      setIsSigned(true);
+    } catch (err: any) {
+      setSignError(err?.message ?? "Error al firmar la transacción");
+    } finally {
       setIsSigning(false);
-      return;
     }
+  };
 
-    if (!ethers.isAddress(ARBITER_ADDRESS)) {
-      setSignError("ARBITER_ADDRESS no configurado correctamente");
-      setIsSigning(false);
-      return;
+  // NUEVA FUNCIÓN: Para liberar el pago
+  const handleReleasePayment = async () => {
+    if (!txHash || !freelancer) return; 
+    
+    setIsReleasing(true);
+    setSignError(null);
+
+    try {
+      // Para la demo de la Hackathon, usaremos el ID 1 de escrow temporalmente
+      // (En producción, esto saldría de la base de datos)
+      const demoEscrowId = 1; 
+
+      await approveWork(demoEscrowId); 
+      
+      // Actualizamos Supabase a estado 3 (Pagado/Finalizado)
+      await supabase.from('acuerdos_escrow')
+        .update({ id_estado_escrow: 3 }) 
+        .eq('id_escrow_onchain', txHash);
+
+      setIsReleased(true);
+    } catch (err: any) {
+      setSignError(err?.message ?? "Error al liberar fondos en la blockchain.");
+    } finally {
+      setIsReleasing(false);
     }
-
-    const agreementText = JSON.stringify({
-      client: clientAddress,
-      freelancer: freelancerWallet,
-      servicioId: servicio.id_servicio,
-      budget,
-      deadlineDays,
-      specifications,
-      timestamp: Date.now(),
-    });
-    const agreementHash = hashAgreement(agreementText);
-
-    const deadlineTimestamp =
-      Math.floor(Date.now() / 1000) + parseInt(deadlineDays) * 86400;
-
-    const receipt = await createEscrow(
-      freelancerWallet,      // ← sanitizada
-      ARBITER_ADDRESS.trim(),
-      deadlineTimestamp,
-      agreementHash,
-      budget
-    );
-
-    const onchainId = receipt.hash ?? receipt.transactionHash;
-    setTxHash(onchainId);
-
-    const { data: clienteData } = await supabase
-      .from('usuario')
-      .select('id_usuario')
-      .eq('wallet', clientAddress)
-      .single();
-
-    await supabase.from('acuerdos_escrow').insert({
-      id_servicio: servicio.id_servicio,
-      id_cliente: clienteData?.id_usuario ?? null,
-      id_freelancer: freelancer.id_usuario,
-      requisitos: specifications,
-      precio_final: parseFloat(budget),
-      deadline: new Date(deadlineTimestamp * 1000).toISOString(),
-      hash_requi: agreementHash,
-      id_escrow_onchain: onchainId,
-      id_estado_escrow: 2,
-    });
-
-    setIsSigned(true);
-  } catch (err: any) {
-    setSignError(err?.message ?? "Error al firmar la transacción");
-  } finally {
-    setIsSigning(false);
-  }
-};
+  };
 
   return (
     <PageContainer>
@@ -235,6 +264,20 @@ export default function AgreementScreen() {
                   ? "✓ Escrow Creado On-Chain"
                   : "Firmar y Bloquear Fondos"}
               </SignButton>
+
+              {/* NUEVO BOTÓN DE PAGO AL FREELANCER (Solo aparece si isSigned es true) */}
+              {isSigned && (
+                <ReleaseButton 
+                  onClick={handleReleasePayment} 
+                  disabled={isReleasing || isReleased}
+                >
+                  {isReleasing 
+                    ? "Liberando pago en blockchain..." 
+                    : isReleased 
+                    ? "🎉 Pago liberado al Freelancer" 
+                    : "Liberar Pago al Freelancer"}
+                </ReleaseButton>
+              )}
 
               {signError && <ErrorText>{signError}</ErrorText>}
 
@@ -363,4 +406,30 @@ const SignButton = styled.button<{ $isSigned: boolean }>`
   border-radius:12px;border:none;cursor:pointer;
   &:disabled{opacity:.5;cursor:not-allowed;}
 `;
+
+// ESTILOS DEL NUEVO BOTÓN
+const ReleaseButton = styled.button`
+  width: 100%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  margin-top: -10px;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: #064e3b;
+    color: #a7f3d0;
+  }
+`;
+
 const StatusText = styled.p`text-align:center;font-size:.7rem;color:#c8c5cb;`;
