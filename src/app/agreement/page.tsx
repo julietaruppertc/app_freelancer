@@ -2,14 +2,19 @@
 
 import React, { useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 export default function AgreementScreen() {
   const [isSigning, setIsSigning] = useState(false);
   const [isSigned, setIsSigned] = useState(false);
 
+  const [budget, setBudget] = useState("");
+  const [deadlineDays, setDeadlineDays] = useState("");
+  const [specifications, setSpecifications] = useState("");
+
   const handleSign = () => {
     setIsSigning(true);
-    // Simulamos el tiempo que tarda la wallet en abrirse y firmar
+
     setTimeout(() => {
       setIsSigning(false);
       setIsSigned(true);
@@ -18,43 +23,81 @@ export default function AgreementScreen() {
 
   return (
     <PageContainer>
+      {/* HEADER */}
+      <HeaderBar>
+        <HeaderLeft>
+          <Logo>FreelancerOS</Logo>
+
+          <DesktopNav>
+            <NavLink href="#" $active>
+              Discover
+            </NavLink>
+            <NavLink href="#">Feed</NavLink>
+            <NavLink href="#">Messages</NavLink>
+          </DesktopNav>
+        </HeaderLeft>
+
+        <HeaderRight>
+          <IconGroup>
+            <span>🔔</span>
+            <span>👤</span>
+          </IconGroup>
+
+          <Link href="/" passHref>
+            <LoginButton>Home</LoginButton>
+          </Link>
+        </HeaderRight>
+      </HeaderBar>
+
       <ContentWrapper>
         <Header>
-          <Title>Acuerdo Final Estático</Title>
+          <Title>Acuerdo Final del Proyecto</Title>
           <Subtitle>
-            Revisa los parámetros finales del proyecto antes de la ejecución on-chain.
+            Define el presupuesto, el tiempo y las especificaciones antes de la
+            ejecución on-chain.
           </Subtitle>
         </Header>
 
         <AgreementCard>
           <Section>
             <Label>Project Title</Label>
-            <ProjectName>Project Alpha: Core dApp Architecture</ProjectName>
+            <ProjectName>Nuevo Proyecto Freelance</ProjectName>
           </Section>
 
           <Grid>
             <Section>
-              <Label>Budget</Label>
-              <HighlightValue>2.5 ETH</HighlightValue>
+              <Label>Presupuesto del Cliente (USD)</Label>
+              <Input
+                type="number"
+                placeholder="Ej: 1500"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+              />
             </Section>
+
             <Section>
-              <Label>Deadline</Label>
-              <Value>30 Days</Value>
+              <Label>Días para Finalizar</Label>
+              <Input
+                type="number"
+                placeholder="Ej: 14"
+                value={deadlineDays}
+                onChange={(e) => setDeadlineDays(e.target.value)}
+              />
             </Section>
           </Grid>
 
           <Section>
-            <Label>Deliverables</Label>
-            <List>
-              <ListItem><Bullet /> Responsive React/Next.js Frontend</ListItem>
-              <ListItem><Bullet /> Web3 Provider & Wallet Integration</ListItem>
-              <ListItem><Bullet /> Core Protocol Smart Contract Hooks</ListItem>
-            </List>
+            <Label>Especificaciones del Proyecto</Label>
+            <TextArea
+              placeholder="Describe qué necesitas exactamente: funcionalidades, tecnología, entregables, etc."
+              value={specifications}
+              onChange={(e) => setSpecifications(e.target.value)}
+            />
           </Section>
 
           <Footer>
             <FooterText>Payment Terms</FooterText>
-            <FooterValue>100% Milestone Release</FooterValue>
+            <FooterValue>Escrow Inteligente AI</FooterValue>
           </Footer>
         </AgreementCard>
 
@@ -62,22 +105,28 @@ export default function AgreementScreen() {
           <InfoBox>
             <InfoIcon>ℹ️</InfoIcon>
             <InfoText>
-              Al firmar, inicias una solicitud segura EIP-712. Tras la confirmación, se generará un hash criptográfico anclando este acuerdo a la bóveda escrow del proyecto.
+              Al firmar, se generará un acuerdo criptográfico seguro usando
+              EIP-712. El presupuesto se bloqueará en escrow hasta completar el
+              proyecto.
             </InfoText>
           </InfoBox>
 
-          <SignButton 
-            onClick={handleSign} 
+          <SignButton
+            onClick={handleSign}
             disabled={isSigning || isSigned}
             $isSigned={isSigned}
           >
-            {isSigning ? "Abriendo Wallet..." : isSigned ? "✓ Acuerdo Firmado" : "Firma EIP-712 con Wallet"}
+            {isSigning
+              ? "Abriendo Wallet..."
+              : isSigned
+              ? "✓ Acuerdo Firmado"
+              : "Firmar Acuerdo"}
           </SignButton>
 
           <StatusText>
-            {isSigned 
-              ? "Hash generado: 0x71C...3a9B" 
-              : "Esperando firma digital de 0x82...4f9a"}
+            {isSigned
+              ? "Hash generado: 0x71C...3a9B"
+              : "Esperando firma digital"}
           </StatusText>
         </ActionSection>
       </ContentWrapper>
@@ -85,7 +134,9 @@ export default function AgreementScreen() {
   );
 }
 
-// --- Styled Components ---
+/* =========================
+STYLED COMPONENTS
+========================= */
 
 const PageContainer = styled.main`
   min-height: 100vh;
@@ -93,17 +144,84 @@ const PageContainer = styled.main`
   color: #e4e1e8;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-  font-family: 'Manrope', sans-serif;
+  align-items: flex-start;
+  padding: 120px 20px 40px 20px;
+  font-family: "Manrope", sans-serif;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 650px;
   display: flex;
   flex-direction: column;
   gap: 32px;
+`;
+
+const HeaderBar = styled.header`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 80px;
+  background: rgba(28, 28, 31, 0.7);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  z-index: 50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+`;
+
+const HeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 48px;
+`;
+
+const Logo = styled.span`
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+`;
+
+const DesktopNav = styled.nav`
+  display: none;
+  gap: 32px;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+`;
+
+const NavLink = styled.a<{ $active?: boolean }>`
+  text-decoration: none;
+  font-weight: ${(props) => (props.$active ? "bold" : "normal")};
+  color: ${(props) => (props.$active ? "#8C3BFF" : "#9ca3af")};
+
+  &:hover {
+    color: white;
+  }
+`;
+
+const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 24px;
+`;
+
+const IconGroup = styled.div`
+  display: flex;
+  gap: 16px;
+  font-size: 1.2rem;
+`;
+
+const LoginButton = styled.a`
+  background: #7000e3;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-decoration: none;
 `;
 
 const Header = styled.header`
@@ -121,11 +239,10 @@ const Subtitle = styled.p`
   color: #c8c5cb;
   font-size: 1rem;
   line-height: 1.5;
-  margin: 0;
 `;
 
 const AgreementCard = styled.article`
-  background-color: #2A2A2F;
+  background-color: #2a2a2f;
   border-radius: 16px;
   padding: 32px;
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -138,7 +255,7 @@ const AgreementCard = styled.article`
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 `;
 
 const Label = styled.label`
@@ -152,8 +269,7 @@ const Label = styled.label`
 const ProjectName = styled.p`
   font-size: 1.25rem;
   font-weight: 600;
-  color: #ffffff;
-  margin: 0;
+  color: white;
 `;
 
 const Grid = styled.div`
@@ -162,42 +278,31 @@ const Grid = styled.div`
   gap: 24px;
 `;
 
-const HighlightValue = styled.p`
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #d5baff; /* Secondary purple from your HTML */
-  margin: 0;
+const Input = styled.input`
+  background: #1b1b20;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+
+  &:focus {
+    outline: none;
+    border-color: #8c3bff;
+  }
 `;
 
-const Value = styled.p`
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0;
-`;
+const TextArea = styled.textarea`
+  background: #1b1b20;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  min-height: 130px;
 
-const List = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const ListItem = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.9rem;
-  color: #e4e1e8;
-`;
-
-const Bullet = styled.span`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #8C3BFF;
+  &:focus {
+    outline: none;
+    border-color: #8c3bff;
+  }
 `;
 
 const Footer = styled.div`
@@ -205,7 +310,6 @@ const Footer = styled.div`
   padding-top: 24px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
 const FooterText = styled.span`
@@ -216,7 +320,6 @@ const FooterText = styled.span`
 const FooterValue = styled.span`
   font-size: 0.875rem;
   font-weight: 600;
-  color: #ffffff;
 `;
 
 const ActionSection = styled.div`
@@ -232,7 +335,6 @@ const InfoBox = styled.div`
   padding: 16px;
   display: flex;
   gap: 12px;
-  align-items: flex-start;
 `;
 
 const InfoIcon = styled.span`
@@ -242,37 +344,22 @@ const InfoIcon = styled.span`
 const InfoText = styled.p`
   font-size: 0.8rem;
   color: #c8c5cb;
-  margin: 0;
-  line-height: 1.5;
 `;
 
 const SignButton = styled.button<{ $isSigned: boolean }>`
   width: 100%;
-  background-color: ${(props) => (props.$isSigned ? '#53E489' : '#8C3BFF')};
-  color: ${(props) => (props.$isSigned ? '#00210d' : '#ffffff')};
+  background-color: ${(props) => (props.$isSigned ? "#53E489" : "#8C3BFF")};
+  color: ${(props) => (props.$isSigned ? "#00210d" : "#ffffff")};
   font-size: 1.125rem;
   font-weight: bold;
   padding: 20px;
   border-radius: 12px;
   border: none;
-  cursor: ${(props) => (props.$isSigned ? 'default' : 'pointer')};
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: ${(props) => (props.$isSigned ? '#53E489' : '#7000E3')};
-  }
-
-  &:disabled {
-    opacity: ${(props) => (props.$isSigned ? '1' : '0.7')};
-    cursor: not-allowed;
-  }
+  cursor: pointer;
 `;
 
 const StatusText = styled.p`
   text-align: center;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   color: #c8c5cb;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 0;
 `;
