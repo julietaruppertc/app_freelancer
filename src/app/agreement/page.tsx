@@ -9,8 +9,8 @@ import { useAgreementData } from "./useAgreementData";
 import { hashAgreement } from "@blockchain/utils";
 import { supabase } from "@/ia/supabaseClient";
 import { ethers } from 'ethers';
-// Ya importamos createEscrow y approveWork
-import { createEscrow, approveWork } from "@blockchain/escrow";
+// Eliminamos approveWork ya que no lo usaremos en esta pantalla
+import { createEscrow } from "@blockchain/escrow";
 
 // Wallet del árbitro del equipo para la hackathon
 const ARBITER_ADDRESS = "0x8a27E08968D2DE77acCE0c871E9502b711235253";
@@ -32,12 +32,11 @@ export default function AgreementScreen() {
     servicio?.descripcion ?? ""
   );
 
-  // Estado de la transacción (Aquí agregué los de liberación de pago)
+  // Estado de la transacción
   const [isSigning, setIsSigning] = useState(false);
   const [isSigned, setIsSigned] = useState(false);
-  const [isReleasing, setIsReleasing] = useState(false);
-  const [isReleased, setIsReleased] = useState(false);
   
+  // Guardamos el txHash devuelto por la blockchain
   const [txHash, setTxHash] = useState<string | null>(null);
   const [signError, setSignError] = useState<string | null>(null);
 
@@ -92,6 +91,7 @@ export default function AgreementScreen() {
         budget
       );
 
+      // Obtenemos el hash de la transacción
       const onchainId = receipt.hash ?? receipt.transactionHash;
       setTxHash(onchainId);
 
@@ -121,33 +121,6 @@ export default function AgreementScreen() {
     }
   };
 
-  // NUEVA FUNCIÓN: Para liberar el pago
-  const handleReleasePayment = async () => {
-    if (!txHash || !freelancer) return; 
-    
-    setIsReleasing(true);
-    setSignError(null);
-
-    try {
-      // Para la demo de la Hackathon, usaremos el ID 1 de escrow temporalmente
-      // (En producción, esto saldría de la base de datos)
-      const demoEscrowId = 1; 
-
-      await approveWork(demoEscrowId); 
-      
-      // Actualizamos Supabase a estado 3 (Pagado/Finalizado)
-      await supabase.from('acuerdos_escrow')
-        .update({ id_estado_escrow: 3 }) 
-        .eq('id_escrow_onchain', txHash);
-
-      setIsReleased(true);
-    } catch (err: any) {
-      setSignError(err?.message ?? "Error al liberar fondos en la blockchain.");
-    } finally {
-      setIsReleasing(false);
-    }
-  };
-
   return (
     <PageContainer>
       {/* HEADER GLOBAL (Estilo Koda) */}
@@ -163,6 +136,7 @@ export default function AgreementScreen() {
           </DesktopNav>
         </HeaderLeft>
         <HeaderRight>
+          <IconGroup><span>🔔</span><span>👤</span></IconGroup>
           <Link href="/login" passHref style={{ textDecoration: 'none' }}>
             <LoginButton>Iniciar Sesión</LoginButton>
           </Link>
@@ -269,25 +243,22 @@ export default function AgreementScreen() {
                   : "Firmar y Bloquear Fondos"}
               </SignButton>
 
-              {/* NUEVO BOTÓN DE PAGO AL FREELANCER (Solo aparece si isSigned es true) */}
+              {/* NUEVO BOTÓN PARA VER EN BSC SCAN */}
               {isSigned && (
-                <ReleaseButton 
-                  onClick={handleReleasePayment} 
-                  disabled={isReleasing || isReleased}
+                <BscScanButton 
+                  href="https://bscscan.com/address/0x3831Ebd363cd1ca6e5eF21d32397Cceb8533e573" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
                 >
-                  {isReleasing 
-                    ? "Liberando pago en blockchain..." 
-                    : isReleased 
-                    ? "🎉 Pago liberado al Freelancer" 
-                    : "Liberar Pago al Freelancer"}
-                </ReleaseButton>
+                  <ExternalIcon>↗</ExternalIcon> Ver Transacción en BscScan
+                </BscScanButton>
               )}
 
               {signError && <ErrorText>{signError}</ErrorText>}
 
               <StatusText>
                 {isSigned && txHash
-                  ? `Tx: ${txHash.slice(0, 10)}...${txHash.slice(-6)}`
+                  ? `Tx Hash: ${txHash.slice(0, 10)}...${txHash.slice(-6)}`
                   : !address
                   ? "Conectá tu wallet para continuar"
                   : !canSign
@@ -420,28 +391,34 @@ const SignButton = styled.button<{ $isSigned: boolean }>`
   &:disabled{opacity:.5;cursor:not-allowed;}
 `;
 
-const ReleaseButton = styled.button`
+const BscScanButton = styled.a`
   width: 100%;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  font-size: 1.125rem;
+  background: rgba(243, 186, 47, 0.15); /* Color amarillo clásico de BSC */
+  color: #f3ba2f;
+  font-size: 1rem;
   font-weight: bold;
-  padding: 20px;
+  padding: 18px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid rgba(243, 186, 47, 0.4);
   cursor: pointer;
   margin-top: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
 
   &:hover {
-    filter: brightness(1.1);
+    background: rgba(243, 186, 47, 0.25);
+    border-color: rgba(243, 186, 47, 0.8);
+    transform: translateY(-2px);
   }
+`;
 
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    background: #064e3b;
-    color: #a7f3d0;
-  }
+const ExternalIcon = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
 `;
 
 const StatusText = styled.p`text-align:center;font-size:.7rem;color:#c8c5cb;`;
