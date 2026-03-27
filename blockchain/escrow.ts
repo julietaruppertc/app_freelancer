@@ -3,8 +3,10 @@
 import { ethers } from 'ethers';
 import EscrowJson from './out/Escrow.sol/Escrow.json';
 import { getSigner } from './provider';
+import deployData from './broadcast/DeployEscrow.s.sol/97/run-latest.json';
 
-const ESCROW_ADDRESS = '0xTuContratoDesplegado';
+// blockchain/escrow.ts — línea 5
+const ESCROW_ADDRESS = '0x3831Ebd363cd1ca6e5eF21d32397Cceb8533e573';
 
 export const escrowContract = () => {
   const signer = getSigner();
@@ -25,8 +27,26 @@ export async function createEscrow(
   const cleanFreelancer = freelancer.trim().replace(/[^\x20-\x7E]/g, '');
   const cleanArbiter = arbiter.trim().replace(/[^\x20-\x7E]/g, '');
 
-  // Asegurar que el hash esté formateado como bytes32 válido
-  const hashBytes32 = ethers.zeroPadValue(agreementHash, 32);
+  // ─── DEBUG: copiá esto y mirá la consola del browser ───
+  console.log("=== DEBUG createEscrow ===");
+  console.log("freelancer:", cleanFreelancer);
+  console.log("freelancer válida:", ethers.isAddress(cleanFreelancer));
+  console.log("arbiter:", cleanArbiter);
+  console.log("arbiter válida:", ethers.isAddress(cleanArbiter));
+  console.log("deadline:", deadline, "→ fecha:", new Date(deadline * 1000).toISOString());
+  console.log("agreementHash raw:", agreementHash);
+  console.log("agreementHash length:", agreementHash.length);
+  console.log("amountEther:", amountEther);
+  console.log("parseEther resultado:", ethers.parseEther(amountEther).toString());
+
+   let hashBytes32: string;
+  try {
+    hashBytes32 = ethers.zeroPadValue(agreementHash, 32);
+    console.log("hashBytes32 OK:", hashBytes32);
+  } catch (e) {
+    console.error("ERROR al formatear hash:", e);
+    throw new Error("agreementHash inválido: " + agreementHash);
+  }
 
   const tx = await contract.createEscrow(
     cleanFreelancer,
@@ -35,7 +55,13 @@ export async function createEscrow(
     hashBytes32,
     { value: ethers.parseEther(amountEther) }
   );
-  return tx.wait();
+  console.log("TX enviada:", tx.hash);
+  const receipt = await tx.wait();
+  console.log("Receipt:", receipt);
+  console.log("Logs del contrato:", receipt.logs);
+
+  return receipt;
+ return tx.wait();
 }
 
 // Enviar trabajo (freelancer llama esto con el hash del entregable)

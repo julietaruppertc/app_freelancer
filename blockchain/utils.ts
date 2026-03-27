@@ -1,3 +1,5 @@
+//src/blockchain/utils.ts
+
 import { keccak256, toUtf8Bytes, zeroPadValue, hexlify } from 'ethers';
 
 export function hashAgreement(agreementText: string): string {
